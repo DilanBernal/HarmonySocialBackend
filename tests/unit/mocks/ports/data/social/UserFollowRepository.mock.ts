@@ -6,7 +6,7 @@ const createMockFollow = (
   id: number,
   followerId: number,
   followedId: number,
-  createdAt?: Date
+  createdAt?: Date,
 ): UserFollowsUser => {
   return new UserFollowsUser(id, followerId, followedId, createdAt ?? new Date());
 };
@@ -25,34 +25,37 @@ const createUserFollowRepositoryMock = (): jest.Mocked<UserFollowRepository> => 
   let follows = createMockFollows();
 
   return {
-    follow: jest.fn().mockImplementation(
-      async (followerId: number, followedId: number): Promise<UserFollowsUser> => {
-        // Check if already following
-        const existing = follows.find(
-          (f) => f.userIdFollower === followerId && f.userIdFollowed === followedId
-        );
+    follow: jest
+      .fn()
+      .mockImplementation(
+        async (followerId: number, followedId: number): Promise<UserFollowsUser> => {
+          // Check if already following
+          const existing = follows.find(
+            (f) => f.userIdFollower === followerId && f.userIdFollowed === followedId,
+          );
 
-        if (existing) {
-          throw new Error("Already following");
-        }
+          if (existing) {
+            throw new Error("Already following");
+          }
 
-        // Check if trying to follow yourself
-        if (followerId === followedId) {
-          throw new Error("Cannot follow yourself");
-        }
+          // Check if trying to follow yourself
+          if (followerId === followedId) {
+            throw new Error("Cannot follow yourself");
+          }
 
-        // Create new follow
-        const newFollow = createMockFollow(nextId++, followerId, followedId);
+          // Create new follow
+          const newFollow = createMockFollow(nextId++, followerId, followedId);
 
-        follows.push(newFollow);
-        return newFollow;
-      }
-    ),
+          follows.push(newFollow);
+          return newFollow;
+        },
+      ),
 
-    unfollow: jest.fn().mockImplementation(
-      async (followerId: number, followedId: number): Promise<void> => {
+    unfollow: jest
+      .fn()
+      .mockImplementation(async (followerId: number, followedId: number): Promise<void> => {
         const index = follows.findIndex(
-          (f) => f.userIdFollower === followerId && f.userIdFollowed === followedId
+          (f) => f.userIdFollower === followerId && f.userIdFollowed === followedId,
         );
 
         if (index === -1) {
@@ -61,28 +64,27 @@ const createUserFollowRepositoryMock = (): jest.Mocked<UserFollowRepository> => 
         }
 
         follows.splice(index, 1);
-      }
-    ),
+      }),
 
-    getFollowers: jest.fn().mockImplementation(
-      async (userId: number): Promise<UserFollowsUser[]> => {
+    getFollowers: jest
+      .fn()
+      .mockImplementation(async (userId: number): Promise<UserFollowsUser[]> => {
         return follows.filter((f) => f.userIdFollowed === userId);
-      }
-    ),
+      }),
 
-    getFollowing: jest.fn().mockImplementation(
-      async (userId: number): Promise<UserFollowsUser[]> => {
+    getFollowing: jest
+      .fn()
+      .mockImplementation(async (userId: number): Promise<UserFollowsUser[]> => {
         return follows.filter((f) => f.userIdFollower === userId);
-      }
-    ),
+      }),
 
-    exists: jest.fn().mockImplementation(
-      async (followerId: number, followedId: number): Promise<boolean> => {
+    exists: jest
+      .fn()
+      .mockImplementation(async (followerId: number, followedId: number): Promise<boolean> => {
         return follows.some(
-          (f) => f.userIdFollower === followerId && f.userIdFollowed === followedId
+          (f) => f.userIdFollower === followerId && f.userIdFollowed === followedId,
         );
-      }
-    ),
+      }),
   };
 };
 

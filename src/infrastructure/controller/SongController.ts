@@ -2,7 +2,7 @@ import SongService from "../../application/services/SongService";
 import { Request, Response } from "express";
 
 export default class SongController {
-  constructor(private songService: SongService) { }
+  constructor(private songService: SongService) {}
 
   async getPagedSongs(req: Request, res: Response) {
     try {

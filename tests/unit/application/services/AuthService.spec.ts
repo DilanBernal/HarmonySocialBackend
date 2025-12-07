@@ -3,7 +3,10 @@ import LoginRequest from "../../../../src/application/dto/requests/User/LoginReq
 import VerifyEmailRequest from "../../../../src/application/dto/requests/User/VerifyEmailRequest";
 import AuthResponse from "../../../../src/application/dto/responses/seg/user/AuthResponse";
 import { ApplicationResponse } from "../../../../src/application/shared/ApplicationReponse";
-import { ApplicationError, ErrorCodes } from "../../../../src/application/shared/errors/ApplicationError";
+import {
+  ApplicationError,
+  ErrorCodes,
+} from "../../../../src/application/shared/errors/ApplicationError";
 
 // Importar los puertos para tiparlos correctamente
 import UserQueryPort from "../../../../src/domain/ports/data/seg/query/UserQueryPort";
@@ -44,7 +47,7 @@ const mockUserInfo: User = new User(
 
 /**
  * Pruebas unitarias para AuthService
- * 
+ *
  * Este servicio maneja la autenticación de usuarios, incluyendo:
  * - Proceso de login con validación de credenciales
  * - Obtención de roles y permisos del usuario
@@ -69,7 +72,7 @@ describe("AuthService", () => {
 
   const mockEmailPort: jest.Mocked<EmailPort> = createEmailPortMock();
 
-  const mockLoggerPort: jest.Mocked<LoggerPort> = createLoggerPort()
+  const mockLoggerPort: jest.Mocked<LoggerPort> = createLoggerPort();
 
   const mockTokenPort: jest.Mocked<TokenPort> = createMockTokenPort();
 
@@ -82,7 +85,6 @@ describe("AuthService", () => {
     userOrEmail: "testuser@example.com",
     password: "password123",
   };
-
 
   const mockAuthResponse: AuthResponse = {
     id: 1,
@@ -122,12 +124,8 @@ describe("AuthService", () => {
     describe("Casos Exitosos", () => {
       it("debe realizar login exitoso con credenciales válidas", async () => {
         // Configurar mocks para caso exitoso
-        mockUserQueryPort.existsUserByFilters.mockResolvedValue(
-          Result.ok(true)
-        );
-        mockUserQueryPort.getUserByFilters.mockResolvedValue(
-          Result.ok(mockUserInfo)
-        );
+        mockUserQueryPort.existsUserByFilters.mockResolvedValue(Result.ok(true));
+        mockUserQueryPort.getUserByFilters.mockResolvedValue(Result.ok(mockUserInfo));
         mockAuthPort.comparePasswords.mockResolvedValue(true);
         mockUserRolePort.listRolesForUser.mockResolvedValue(mockRoles);
         mockTokenPort.generateStamp.mockReturnValue("new_concurrency_stamp");
@@ -155,22 +153,18 @@ describe("AuthService", () => {
         });
         expect(mockAuthPort.comparePasswords).toHaveBeenCalledWith(
           validLoginRequest.password,
-          mockUserInfo.password
+          mockUserInfo.password,
         );
         expect(mockUserRolePort.listRolesForUser).toHaveBeenCalledWith(1);
         expect(mockUserCommandPort.updateUser).toHaveBeenCalledWith(1, {
-          concurrencyStamp: "new_concurrency_stamp"
+          concurrencyStamp: "new_concurrency_stamp",
         });
       });
 
       it("debe realizar login exitoso sin roles asignados", async () => {
         // Configurar para usuario sin roles
-        mockUserQueryPort.existsUserByFilters.mockResolvedValue(
-          Result.ok(true)
-        );
-        mockUserQueryPort.getUserByFilters.mockResolvedValue(
-          Result.ok(mockUserInfo)
-        );
+        mockUserQueryPort.existsUserByFilters.mockResolvedValue(Result.ok(true));
+        mockUserQueryPort.getUserByFilters.mockResolvedValue(Result.ok(mockUserInfo));
         mockAuthPort.comparePasswords.mockResolvedValue(true);
         mockUserRolePort.listRolesForUser.mockResolvedValue([]);
         mockTokenPort.generateStamp.mockReturnValue("new_stamp");
@@ -189,12 +183,8 @@ describe("AuthService", () => {
 
       it("debe manejar correctamente cuando no se pueden obtener permisos", async () => {
         // Configurar mocks
-        mockUserQueryPort.existsUserByFilters.mockResolvedValue(
-          Result.ok(true)
-        );
-        mockUserQueryPort.getUserByFilters.mockResolvedValue(
-          Result.ok(mockUserInfo)
-        );
+        mockUserQueryPort.existsUserByFilters.mockResolvedValue(Result.ok(true));
+        mockUserQueryPort.getUserByFilters.mockResolvedValue(Result.ok(mockUserInfo));
         mockAuthPort.comparePasswords.mockResolvedValue(true);
         mockUserRolePort.listRolesForUser.mockResolvedValue(mockRoles);
         mockTokenPort.generateStamp.mockReturnValue("new_stamp");
@@ -209,7 +199,7 @@ describe("AuthService", () => {
         // Verificaciones - debe funcionar aunque falle la obtención de roles
         expect(result.success).toBe(true);
         expect(mockLoggerPort.warn).toHaveBeenCalledWith(
-          "No se pudieron obtener los roles del usuario"
+          "No se pudieron obtener los roles del usuario",
         );
       });
     });
@@ -239,9 +229,7 @@ describe("AuthService", () => {
     describe("Casos de Error - Credenciales", () => {
       it("debe fallar cuando el usuario no existe", async () => {
         // Configurar mock para usuario inexistente
-        mockUserQueryPort.existsUserByFilters.mockResolvedValue(
-          Result.ok(false)
-        );
+        mockUserQueryPort.existsUserByFilters.mockResolvedValue(Result.ok(false));
 
         // Ejecutar
         const result = await authService.login(validLoginRequest);
@@ -254,9 +242,7 @@ describe("AuthService", () => {
 
       it("debe fallar cuando existsUserByFilters retorna error", async () => {
         // Configurar mock para retornar resultado negativo (user no existe)
-        mockUserQueryPort.existsUserByFilters.mockResolvedValue(
-          Result.fail(new Error("DB Error"))
-        );
+        mockUserQueryPort.existsUserByFilters.mockResolvedValue(Result.fail(new Error("DB Error")));
 
         // Ejecutar
         const result = await authService.login(validLoginRequest);
@@ -268,12 +254,8 @@ describe("AuthService", () => {
 
       it("debe fallar cuando no se puede obtener información del usuario", async () => {
         // Configurar mocks
-        mockUserQueryPort.existsUserByFilters.mockResolvedValue(
-          Result.ok(true)
-        );
-        mockUserQueryPort.getUserByFilters.mockResolvedValue(
-          Result.ok(null as any)
-        );
+        mockUserQueryPort.existsUserByFilters.mockResolvedValue(Result.ok(true));
+        mockUserQueryPort.getUserByFilters.mockResolvedValue(Result.ok(null as any));
 
         // Ejecutar
         const result = await authService.login(validLoginRequest);
@@ -286,12 +268,8 @@ describe("AuthService", () => {
 
       it("debe fallar con contraseña incorrecta", async () => {
         // Configurar mocks
-        mockUserQueryPort.existsUserByFilters.mockResolvedValue(
-          Result.ok(true)
-        );
-        mockUserQueryPort.getUserByFilters.mockResolvedValue(
-          Result.ok(mockUserInfo)
-        );
+        mockUserQueryPort.existsUserByFilters.mockResolvedValue(Result.ok(true));
+        mockUserQueryPort.getUserByFilters.mockResolvedValue(Result.ok(mockUserInfo));
         mockAuthPort.comparePasswords.mockResolvedValue(false);
 
         // Ejecutar
@@ -307,12 +285,8 @@ describe("AuthService", () => {
     describe("Casos de Error - Proceso de Login", () => {
       it("debe fallar cuando loginUser retorna null", async () => {
         // Configurar mocks hasta loginUser
-        mockUserQueryPort.existsUserByFilters.mockResolvedValue(
-          Result.ok(true)
-        );
-        mockUserQueryPort.getUserByFilters.mockResolvedValue(
-          Result.ok(mockUserInfo)
-        );
+        mockUserQueryPort.existsUserByFilters.mockResolvedValue(Result.ok(true));
+        mockUserQueryPort.getUserByFilters.mockResolvedValue(Result.ok(mockUserInfo));
         mockAuthPort.comparePasswords.mockResolvedValue(true);
         mockUserRolePort.listRolesForUser.mockResolvedValue([]);
         mockTokenPort.generateStamp.mockReturnValue("new_stamp");
@@ -322,7 +296,7 @@ describe("AuthService", () => {
         // Ejecutar
         const result = await authService.login(validLoginRequest);
 
-        // Verificaciones - El error real será "Ocurrió un error inesperado" porque 
+        // Verificaciones - El error real será "Ocurrió un error inesperado" porque
         // el código intenta acceder a propiedades de null antes de la verificación
         expect(result.success).toBe(false);
         expect(result.error?.message).toBe("Ocurrió un error inesperado");
@@ -334,7 +308,7 @@ describe("AuthService", () => {
       it("debe manejar ApplicationResponse como error", async () => {
         // Configurar mock para lanzar ApplicationResponse como excepción
         const errorResponse = ApplicationResponse.failure(
-          new ApplicationError("Custom error", ErrorCodes.VALIDATION_ERROR)
+          new ApplicationError("Custom error", ErrorCodes.VALIDATION_ERROR),
         );
         mockUserQueryPort.existsUserByFilters.mockRejectedValue(errorResponse);
 
@@ -345,7 +319,7 @@ describe("AuthService", () => {
         expect(result.success).toBe(false);
         expect(mockLoggerPort.error).toHaveBeenCalledWith(
           "Error controlado durante el login",
-          errorResponse
+          errorResponse,
         );
       });
 
@@ -365,7 +339,7 @@ describe("AuthService", () => {
         expect(result.error?.details).toContain(error.message);
         expect(mockLoggerPort.error).toHaveBeenCalledWith(
           "Error inesperado durante el login",
-          error
+          error,
         );
       });
 
@@ -390,7 +364,7 @@ describe("AuthService", () => {
         // Datos de prueba
         const verifyEmailRequest: VerifyEmailRequest = {
           token: "valid_token_123",
-          email: "testuser@example.com"
+          email: "testuser@example.com",
         } as any;
 
         // Ejecutar
@@ -400,10 +374,8 @@ describe("AuthService", () => {
         expect(result.success).toBe(true);
         expect(result.data).toBe(true);
       });
-
     });
     describe("Casos de error", () => {
-
       it("Debe fallar cuando llegue null", async () => {
         const result = await authService.confirmEmail({} as any);
 
@@ -425,13 +397,13 @@ describe("AuthService", () => {
       it("Debe saltar error cuando no exista el usuario", async () => {
         // Configurar mock para que no encuentre el usuario
         mockUserQueryPort.getUserByFilters.mockResolvedValue(
-          Result.fail(new Error("Usuario no encontrado"))
+          Result.fail(new Error("Usuario no encontrado")),
         );
 
         const datosDePrueba: VerifyEmailRequest = {
           token: "valid_token_123",
-          email: "email_wrong@example.com"
-        }
+          email: "email_wrong@example.com",
+        };
 
         const result = await authService.confirmEmail(datosDePrueba);
 
@@ -442,9 +414,9 @@ describe("AuthService", () => {
       it("Debe saltar error cuando el token sea invalido", async () => {
         const datosDePrueba: VerifyEmailRequest = {
           token: "",
-          email: ""
-        }
-      })
+          email: "",
+        };
+      });
     });
   });
 
@@ -460,15 +432,13 @@ describe("AuthService", () => {
 
       // Verificar que el servicio se instancia correctamente
       expect(authService).toBeDefined();
-      expect(typeof authService.login).toBe('function');
-      expect(typeof authService.confirmEmail).toBe('function');
+      expect(typeof authService.login).toBe("function");
+      expect(typeof authService.confirmEmail).toBe("function");
     });
 
     it("debe limpiar mocks entre tests", () => {
       // Configurar un mock
-      mockUserQueryPort.existsUserByFilters.mockResolvedValue(
-        Result.ok(true)
-      );
+      mockUserQueryPort.existsUserByFilters.mockResolvedValue(Result.ok(true));
 
       // Verificar que está configurado
       expect(mockUserQueryPort.existsUserByFilters).toHaveBeenCalledTimes(0);

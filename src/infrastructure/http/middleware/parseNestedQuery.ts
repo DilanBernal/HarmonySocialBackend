@@ -13,8 +13,8 @@ export default function parseNestedQuery(req: Request, res: Response, next: Next
   const parsedQuery: Record<string, any> = {};
 
   for (const [key, value] of Object.entries(req.query)) {
-    if (key.includes('.')) {
-      const keys = key.split('.');
+    if (key.includes(".")) {
+      const keys = key.split(".");
       let current = parsedQuery;
 
       for (let i = 0; i < keys.length - 1; i++) {
@@ -26,8 +26,8 @@ export default function parseNestedQuery(req: Request, res: Response, next: Next
 
       current[keys[keys.length - 1]] = value;
     } else {
-      if (key === 'q') {
-        parsedQuery['general_filter'] = value;
+      if (key === "q") {
+        parsedQuery["general_filter"] = value;
         continue;
       }
       parsedQuery[key] = value;

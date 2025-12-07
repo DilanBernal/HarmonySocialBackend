@@ -18,18 +18,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 10
-          
+
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
           node-version: "24.x"
-          cache: 'pnpm'
-      
+          cache: "pnpm"
 
       - name: install dependencies
         run: |
@@ -46,7 +44,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
@@ -56,7 +54,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "24.x"
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: and build
         run: |
@@ -89,7 +87,3 @@ jobs:
   #         package: .
 
   #         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9F668B43980F4E7B9EADCE48CAA4C80B }}
-
-
-
-

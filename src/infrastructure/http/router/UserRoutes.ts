@@ -21,7 +21,10 @@ import loginSchema from "../../validator/seg/user/LoginValidator";
 import registerSchema from "../../validator/seg/user/RegisterValidator";
 import userSearchParamsSchema from "../../validator/seg/user/UserPaginatedValidator";
 import authenticateToken from "../middleware/authMiddleware";
-import { enrichPermissionsFromToken, requirePermissions } from "../middleware/authorizationMiddleware";
+import {
+  enrichPermissionsFromToken,
+  requirePermissions,
+} from "../middleware/authorizationMiddleware";
 import parseNestedQuery from "../middleware/parseNestedQuery";
 import { validatePaginatedRequest } from "../middleware/validatePaginatedRequest";
 import { validateRequest } from "../middleware/validateRequest";
@@ -68,7 +71,7 @@ const userController = new UserController(
 
 router.post("/login", validateRequest(loginSchema), async (req: Request, res: Response) => {
   try {
-    loggerAdapter.debug(req.body)
+    loggerAdapter.debug(req.body);
     await userController.loginUser(req, res);
   } catch (error: any) {
     console.error("Error en login: ", error);
@@ -77,9 +80,8 @@ router.post("/login", validateRequest(loginSchema), async (req: Request, res: Re
 });
 
 router.post("/register", validateRequest(registerSchema), async (request, response) => {
-
   try {
-    loggerAdapter.debug(request.body)
+    loggerAdapter.debug(request.body);
     await userController.registerUser(request, response);
   } catch (error: any) {
     console.error("Error en usuario: ", error);
@@ -141,27 +143,23 @@ router.get(
   },
 );
 
-router.get(
-  "/basic-info",
-  enrichPermissionsFromToken,
-  async (req, res) => {
-    try {
-      await userController.getBasicUserData(req, res);
-    } catch (error: any) {
-      loggerAdapter.debug(
-        "Es en la parte despues de que el error no sea instancia ni de NotFoundResponse ni de ApplicationResponse",
-        [error, typeof error],
-      );
+router.get("/basic-info", enrichPermissionsFromToken, async (req, res) => {
+  try {
+    await userController.getBasicUserData(req, res);
+  } catch (error: any) {
+    loggerAdapter.debug(
+      "Es en la parte despues de que el error no sea instancia ni de NotFoundResponse ni de ApplicationResponse",
+      [error, typeof error],
+    );
 
-      loggerAdapter.error("Ocurrio un error al traer la info del usuario", [error, error.title]);
-      const errorMessage = error.message ?? "Error al traer el usuario";
-      res.status(error.statusCode ?? 500).json({
-        message: errorMessage,
-      });
-      console.error(errorMessage, error);
-    }
-  },
-);
+    loggerAdapter.error("Ocurrio un error al traer la info del usuario", [error, error.title]);
+    const errorMessage = error.message ?? "Error al traer el usuario";
+    res.status(error.statusCode ?? 500).json({
+      message: errorMessage,
+    });
+    console.error(errorMessage, error);
+  }
+});
 
 router.put(
   "/:id",

@@ -65,9 +65,7 @@ const createUserCommandPortMock = (): jest.Mocked<UserCommandPort> => {
       }
       // Simular error de duplicado
       if (user.email === mockUser.email) {
-        return Promise.resolve(
-          Result.fail(new Error("Email ya existe"))
-        );
+        return Promise.resolve(Result.fail(new Error("Email ya existe")));
       }
       const newId = nextId++;
       return Promise.resolve(Result.ok(newId));
@@ -78,9 +76,7 @@ const createUserCommandPortMock = (): jest.Mocked<UserCommandPort> => {
       if (existingUser) {
         return Promise.resolve(Result.ok(undefined));
       }
-      return Promise.resolve(
-        Result.fail(new Error("Usuario no encontrado"))
-      );
+      return Promise.resolve(Result.fail(new Error("Usuario no encontrado")));
     }),
 
     deleteUser: jest.fn().mockImplementation((id: number) => {
@@ -88,9 +84,7 @@ const createUserCommandPortMock = (): jest.Mocked<UserCommandPort> => {
       if (existingUser) {
         return Promise.resolve(Result.ok(undefined));
       }
-      return Promise.resolve(
-        Result.fail(new Error("Usuario no encontrado"))
-      );
+      return Promise.resolve(Result.fail(new Error("Usuario no encontrado")));
     }),
   };
 };

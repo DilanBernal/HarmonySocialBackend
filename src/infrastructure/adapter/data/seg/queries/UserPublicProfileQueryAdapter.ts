@@ -45,15 +45,14 @@ export default class UserPublicProfileQueryAdapter implements UserPublicProfileQ
   }
   async getUserPublicProfileByFilters(filters: UserFilters): Promise<Result<UserPublicProfile>> {
     try {
-      const qb = this.applyFilters(filters)
-        .select([
-          "user.id",
-          "user.username",
-          "user.profile_image",
-          "user.learning_points",
-          "user.favorite_instrument",
-          "user.created_at",
-        ]);
+      const qb = this.applyFilters(filters).select([
+        "user.id",
+        "user.username",
+        "user.profile_image",
+        "user.learning_points",
+        "user.favorite_instrument",
+        "user.created_at",
+      ]);
       const entity = await qb.getOne();
       if (!entity) return Result.fail(new DomainEntityNotFoundError({ entity: "usuario" }));
       return Result.ok(entity.toUserPublicProfile());
@@ -65,15 +64,14 @@ export default class UserPublicProfileQueryAdapter implements UserPublicProfileQ
     filters: UserFilters,
   ): Promise<Result<UserPublicProfile[]>> {
     try {
-      const qb = this.applyFilters(filters)
-        .select([
-          "user.id",
-          "user.username",
-          "user.profile_image",
-          "user.learning_points",
-          "user.favorite_instrument",
-          "user.created_at",
-        ]);
+      const qb = this.applyFilters(filters).select([
+        "user.id",
+        "user.username",
+        "user.profile_image",
+        "user.learning_points",
+        "user.favorite_instrument",
+        "user.created_at",
+      ]);
       const rows = await qb.getMany();
       return Result.ok(rows.map((u) => u.toUserPublicProfile()));
     } catch (error: unknown) {
@@ -82,32 +80,36 @@ export default class UserPublicProfileQueryAdapter implements UserPublicProfileQ
   }
 
   private applyFilters(filters: UserFilters): SelectQueryBuilder<UserEntity> {
-    const queryBuilder: SelectQueryBuilder<UserEntity> =
-      this.userRepository
-        .createQueryBuilder("user")
-        .limit(50)
-        .innerJoin("user_roles", "ur", "user.id = ur.user_id")
-        .andWhere("ur.role_id = 1")
-        .andWhere("user.status = :status", { status: UserStatus.ACTIVE });
+    const queryBuilder: SelectQueryBuilder<UserEntity> = this.userRepository
+      .createQueryBuilder("user")
+      .limit(50)
+      .innerJoin("user_roles", "ur", "user.id = ur.user_id")
+      .andWhere("ur.role_id = 1")
+      .andWhere("user.status = :status", { status: UserStatus.ACTIVE });
 
     if (filters.includeFilters) {
       if (filters.id) queryBuilder.andWhere("user.id = :id", { id: filters.id });
 
-      if (filters.email) queryBuilder.andWhere("user.normalized_email = :email", { email: filters.email });
+      if (filters.email)
+        queryBuilder.andWhere("user.normalized_email = :email", { email: filters.email });
 
       if (filters.username)
-        queryBuilder.andWhere("user.normalized_username like :username", { username: `${filters.username.toUpperCase()}%` });
-
+        queryBuilder.andWhere("user.normalized_username like :username", {
+          username: `${filters.username.toUpperCase()}%`,
+        });
     } else {
-      queryBuilder.andWhere(new Brackets(qb => {
-        if (filters.id) qb.orWhere("user.id = :id", { id: filters.id });
+      queryBuilder.andWhere(
+        new Brackets((qb) => {
+          if (filters.id) qb.orWhere("user.id = :id", { id: filters.id });
 
-        if (filters.email) qb.orWhere("user.normalized_email = :email", { email: filters.email });
+          if (filters.email) qb.orWhere("user.normalized_email = :email", { email: filters.email });
 
-        if (filters.username)
-          qb.orWhere("user.normalized_username like :username", { username: `${filters.username.toUpperCase()}%` });
-
-      }));
+          if (filters.username)
+            qb.orWhere("user.normalized_username like :username", {
+              username: `${filters.username.toUpperCase()}%`,
+            });
+        }),
+      );
     }
     return queryBuilder;
   }

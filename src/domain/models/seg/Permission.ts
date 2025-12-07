@@ -5,13 +5,7 @@ export default class Permission {
   private _createdAt!: Date;
   private _updatedAt?: Date;
 
-  constructor(
-    id: number,
-    name: string,
-    description?: string,
-    createdAt?: Date,
-    updatedAt?: Date,
-  ) {
+  constructor(id: number, name: string, description?: string, createdAt?: Date, updatedAt?: Date) {
     this.id = id;
     this.name = name;
     this.description = description;
@@ -37,7 +31,9 @@ export default class Permission {
       throw new Error("El nombre del permiso no puede estar vacío");
     }
     if (!/^[a-z]+\.[a-z_]+$/.test(value.trim())) {
-      throw new Error("El nombre del permiso debe tener formato: dominio.accion (ej: artist.create)");
+      throw new Error(
+        "El nombre del permiso debe tener formato: dominio.accion (ej: artist.create)",
+      );
     }
     this._name = value.trim().toLowerCase();
   }
@@ -124,9 +120,7 @@ export enum CorePermission {
 }
 
 export const DefaultRolePermissionMapping: Record<string, CorePermission[]> = {
-  admin: [
-    ...Object.values(CorePermission)
-  ],
+  admin: [...Object.values(CorePermission)],
   artist: [
     CorePermission.ARTIST_UPDATE,
     CorePermission.USER_READ,
@@ -140,12 +134,12 @@ export const DefaultRolePermissionMapping: Record<string, CorePermission[]> = {
     CorePermission.SONG_OWN_UPDATE,
     CorePermission.SONG_OWN_DELETE,
     CorePermission.SONG_READ,
-    CorePermission.SONG_CREATE
+    CorePermission.SONG_CREATE,
   ],
   common_user: [
     CorePermission.USER_READ,
     CorePermission.FILE_OWN_DELETE,
-    CorePermission.FILE_OWN_UPDATE
+    CorePermission.FILE_OWN_UPDATE,
   ],
 };
 

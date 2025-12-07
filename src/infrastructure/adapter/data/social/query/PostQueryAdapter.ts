@@ -4,8 +4,7 @@ import Result from "../../../../../domain/shared/Result";
 import PostFilters from "../../../../../domain/valueObjects/PostFilters";
 
 export default class PostQueryAdapter implements PostQueryPort {
-
-  // private readonly 
+  // private readonly
 
   findById(id: number): Promise<Result<Post>> {
     throw new Error("Method not implemented.");
@@ -22,5 +21,4 @@ export default class PostQueryAdapter implements PostQueryPort {
   existsById(id: number): Promise<Result<boolean>> {
     throw new Error("Method not implemented.");
   }
-
 }

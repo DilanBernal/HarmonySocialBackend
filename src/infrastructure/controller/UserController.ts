@@ -36,7 +36,9 @@ export default class UserController {
   async registerUser(req: Request, res: Response) {
     const regRequest: RegisterRequest = req.body;
     try {
-      const user: Pick<User, "fullName" | "email" | "username" | "password" | "profileImage" | "favoriteInstrument"
+      const user: Pick<
+        User,
+        "fullName" | "email" | "username" | "password" | "profileImage" | "favoriteInstrument"
       > = {
         fullName: regRequest.fullName,
         email: regRequest.email,
@@ -497,7 +499,7 @@ export default class UserController {
             case ErrorCodes.SERVER_ERROR:
               return res.status(500).json({ message: "Error interno del servidor" });
             case ErrorCodes.BUSINESS_RULE_VIOLATION:
-              return res.status(400).json({ message: "El usuario ya esta activo" })
+              return res.status(400).json({ message: "El usuario ya esta activo" });
             default:
               return res.status(500).json({ message: "Error desconocido" });
           }

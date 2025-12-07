@@ -8,7 +8,7 @@ export default class UserRoleController {
   constructor(
     private service: UserRoleService,
     private logger: LoggerPort,
-  ) { }
+  ) {}
 
   async assign(req: Request, res: Response) {
     const { userId, roleId } = req.body;

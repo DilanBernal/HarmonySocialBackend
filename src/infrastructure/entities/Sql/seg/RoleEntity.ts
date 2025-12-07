@@ -35,13 +35,7 @@ export default class RoleEntity {
    * Converts this entity to a domain object
    */
   toDomain(): Role {
-    return new Role(
-      this.id,
-      this.name,
-      this.description,
-      this.created_at,
-      this.updated_at,
-    );
+    return new Role(this.id, this.name, this.description, this.created_at, this.updated_at);
   }
 
   /**

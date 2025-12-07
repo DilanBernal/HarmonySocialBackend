@@ -4,12 +4,7 @@ export default class UserFollowsUser {
   private _userIdFollowed!: number;
   private _createdAt!: Date;
 
-  constructor(
-    id: number,
-    userIdFollower: number,
-    userIdFollowed: number,
-    createdAt?: Date,
-  ) {
+  constructor(id: number, userIdFollower: number, userIdFollowed: number, createdAt?: Date) {
     this.id = id;
     this.userIdFollower = userIdFollower;
     this.userIdFollowed = userIdFollowed;

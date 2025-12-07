@@ -6,16 +6,21 @@ import UserPublicProfileQueryPort from "../../../domain/ports/data/seg/query/Use
 import UserPublicProfile from "../../../domain/valueObjects/UserPublicProfile";
 
 export default class SearchBarService {
-  constructor(private readonly userQueryPort: UserPublicProfileQueryPort,
+  constructor(
+    private readonly userQueryPort: UserPublicProfileQueryPort,
     private readonly artistQueryPort: ArtistQueryPort,
-    private readonly songQueryPort: SongQueryPort) { }
+    private readonly songQueryPort: SongQueryPort,
+  ) {}
 
   async search(req: string) {
     try {
       const promises: Promise<any>[] = [
-        this.userQueryPort.searchUsersPublicProfileByFilters({ username: req, includeFilters: true }),
+        this.userQueryPort.searchUsersPublicProfileByFilters({
+          username: req,
+          includeFilters: true,
+        }),
         this.artistQueryPort.searchByFilters({ includeFilters: true, artistName: req }),
-        this.songQueryPort.searchByFilters({ includeFilters: false, genre: req, title: req })
+        this.songQueryPort.searchByFilters({ includeFilters: false, genre: req, title: req }),
       ];
 
       const [userResult, artistResult, songResult] = await Promise.allSettled(promises);
@@ -35,13 +40,13 @@ export default class SearchBarService {
         songs = songResult.value.value;
       }
       let results: {
-        users: UserPublicProfile[],
-        artists: Artist[],
-        songs: Song[]
+        users: UserPublicProfile[];
+        artists: Artist[];
+        songs: Song[];
       } = {
         users: [],
         artists: [],
-        songs: []
+        songs: [],
       };
       results.users = users;
       results.artists = artists;

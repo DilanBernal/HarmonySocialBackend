@@ -25,7 +25,7 @@ export default class PaginationResponse<T> {
   }
 
   public static createEmpty<T>(): PaginationResponse<T> {
-    return PaginationResponse.create([], 0, 0,);
+    return PaginationResponse.create([], 0, 0);
   }
 
   public get page_number(): number | undefined {

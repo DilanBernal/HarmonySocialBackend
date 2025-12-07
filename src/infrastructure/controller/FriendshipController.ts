@@ -3,7 +3,7 @@ import FriendshipService from "../../application/services/FriendshipService";
 import { ApplicationResponse } from "../../application/shared/ApplicationReponse";
 
 export default class FriendshipController {
-  constructor(private friendshipService: FriendshipService) { }
+  constructor(private friendshipService: FriendshipService) {}
 
   /**
 
@@ -66,13 +66,12 @@ export default class FriendshipController {
         Number(req.query.objId),
       );
 
-
       if (!response.success) {
         res.status(400).send("Ocurrio un error al traer los amigos" + response.error?.message);
       }
 
       res.status(200).json(response.data);
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**

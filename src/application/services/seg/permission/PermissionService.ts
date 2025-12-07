@@ -4,7 +4,7 @@ import { ApplicationResponse } from "../../../shared/ApplicationReponse";
 import { ApplicationError, ErrorCodes } from "../../../shared/errors/ApplicationError";
 
 export default class PermissionService {
-  constructor(private permissionPort: PermissionPort) { }
+  constructor(private permissionPort: PermissionPort) {}
 
   async create(name: string, description?: string) {
     if (!name || name.length < 3) {

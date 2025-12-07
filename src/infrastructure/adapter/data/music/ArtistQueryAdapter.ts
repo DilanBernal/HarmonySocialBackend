@@ -60,10 +60,9 @@ export default class ArtistQueryAdapter implements ArtistQueryPort {
       const qb = this.applyFilters(filters);
       const result = await qb.getMany();
 
-      return Result.ok(result.map(x => x.toDomain()));
+      return Result.ok(result.map((x) => x.toDomain()));
     } catch (error) {
-      if (error instanceof Error)
-        return Result.fail(error);
+      if (error instanceof Error) return Result.fail(error);
       throw error;
     }
   }
@@ -101,12 +100,10 @@ export default class ArtistQueryAdapter implements ArtistQueryPort {
     }
   }
 
-
   private applyFilters(filters: ArtistFilters): SelectQueryBuilder<ArtistEntity> {
-    const queryBuilder: SelectQueryBuilder<ArtistEntity> =
-      this.artistRepository
-        .createQueryBuilder("artist")
-        .limit(50);
+    const queryBuilder: SelectQueryBuilder<ArtistEntity> = this.artistRepository
+      .createQueryBuilder("artist")
+      .limit(50);
 
     if (filters.includeFilters) {
       if (filters.id) {
@@ -114,42 +111,54 @@ export default class ArtistQueryAdapter implements ArtistQueryPort {
       }
 
       if (filters.artistName) {
-        queryBuilder.andWhere("artist.artist_name LIKE :artistName", { artistName: `%${filters.artistName}%` });
+        queryBuilder.andWhere("artist.artist_name LIKE :artistName", {
+          artistName: `%${filters.artistName}%`,
+        });
       }
 
       if (filters.countryCode) {
-        queryBuilder.andWhere("artist.countryCode = :countryCode", { countryCode: filters.countryCode });
+        queryBuilder.andWhere("artist.countryCode = :countryCode", {
+          countryCode: filters.countryCode,
+        });
       }
 
       if (filters.formationYear) {
-        queryBuilder.andWhere("artist.formationYear = :formationYear", { formationYear: filters.formationYear });
+        queryBuilder.andWhere("artist.formationYear = :formationYear", {
+          formationYear: filters.formationYear,
+        });
       }
 
       if (filters.verified !== undefined) {
         queryBuilder.andWhere("artist.verified = :verified", { verified: filters.verified });
       }
     } else {
-      queryBuilder.andWhere(new Brackets(qb => {
-        if (filters.id) {
-          qb.orWhere("artist.id = :id", { id: filters.id });
-        }
+      queryBuilder.andWhere(
+        new Brackets((qb) => {
+          if (filters.id) {
+            qb.orWhere("artist.id = :id", { id: filters.id });
+          }
 
-        if (filters.artistName) {
-          qb.orWhere("artist.artist_name LIKE :artistName", { artistName: `%${filters.artistName}%` });
-        }
+          if (filters.artistName) {
+            qb.orWhere("artist.artist_name LIKE :artistName", {
+              artistName: `%${filters.artistName}%`,
+            });
+          }
 
-        if (filters.countryCode) {
-          qb.orWhere("artist.countryCode = :countryCode", { countryCode: filters.countryCode });
-        }
+          if (filters.countryCode) {
+            qb.orWhere("artist.countryCode = :countryCode", { countryCode: filters.countryCode });
+          }
 
-        if (filters.formationYear) {
-          qb.orWhere("artist.formationYear = :formationYear", { formationYear: filters.formationYear });
-        }
+          if (filters.formationYear) {
+            qb.orWhere("artist.formationYear = :formationYear", {
+              formationYear: filters.formationYear,
+            });
+          }
 
-        if (filters.verified !== undefined) {
-          qb.orWhere("artist.verified = :verified", { verified: filters.verified });
-        }
-      }));
+          if (filters.verified !== undefined) {
+            qb.orWhere("artist.verified = :verified", { verified: filters.verified });
+          }
+        }),
+      );
     }
 
     return queryBuilder;

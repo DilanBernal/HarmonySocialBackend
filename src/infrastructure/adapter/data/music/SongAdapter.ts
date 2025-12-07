@@ -87,7 +87,9 @@ export default class SongAdapter {
     if (dto.album !== undefined) {
       // Si el DTO trae un id de álbum, busca el objeto AlbumEntity
       const AlbumEntity = require("../../entities/AlbumEntity").default;
-      albumObj = await SqlAppDataSource.getRepository(AlbumEntity).findOne({ where: { id: dto.album } });
+      albumObj = await SqlAppDataSource.getRepository(AlbumEntity).findOne({
+        where: { id: dto.album },
+      });
     }
 
     const partial: DeepPartial<SongEntity> = {

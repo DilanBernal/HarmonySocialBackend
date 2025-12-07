@@ -16,7 +16,7 @@ export default class UserQueryService {
     private readonly userQueryPort: UserQueryPort,
     private readonly userRolePort: UserRolePort,
     private readonly logger: LoggerPort,
-  ) { }
+  ) {}
 
   async getAllUsers(): Promise<ApplicationResponse<UserResponse[]>> {
     try {

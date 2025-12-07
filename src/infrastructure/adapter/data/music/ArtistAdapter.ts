@@ -5,7 +5,10 @@ import Artist, { ArtistStatus } from "../../../../domain/models/music/Artist";
 import ArtistPort from "../../../../domain/ports/data/music/ArtistPort";
 import { ArtistSearchFilters } from "../../../../application/dto/requests/Artist/ArtistSearchFilters";
 import { ApplicationResponse } from "../../../../application/shared/ApplicationReponse";
-import { ApplicationError, ErrorCodes } from "../../../../application/shared/errors/ApplicationError";
+import {
+  ApplicationError,
+  ErrorCodes,
+} from "../../../../application/shared/errors/ApplicationError";
 import PaginationRequest from "../../../../application/dto/utils/PaginationRequest";
 import PaginationResponse from "../../../../application/dto/utils/PaginationResponse";
 import areAllValuesEmpty from "../../../../application/shared/utils/functions/areAllValuesEmpty";
@@ -139,31 +142,48 @@ export default class ArtistAdapter implements ArtistPort {
       if (!filters) {
         return ApplicationResponse.success(PaginationResponse.createEmpty());
       }
-      const queryBuilder = this.repo.createQueryBuilder(`${tableRefName}`)
-        .select(`
+      const queryBuilder = this.repo
+        .createQueryBuilder(`${tableRefName}`)
+        .select(
+          `
           ${tableRefName}.id,
           ${tableRefName}.artist_name,
-          ${tableRefName}.verified`)
+          ${tableRefName}.verified`,
+        )
         .where(`${tableRefName}.status = :status`, { status: ArtistStatus.ACTIVE });
 
       if (!areAllValuesEmpty(filters)) {
-        queryBuilder.andWhere(new Brackets((qb) => {
-          if (filters.name) {
-            qb.where(`LOWER(${tableRefName}.artist_name) LIKE :artistName`, { artistName: filters.name + '%' });
-          }
-          if (filters.country) {
-            qb.orWhere(`${tableRefName}.country_code LIKE :countryCode`, { countryCode: filters.country })
-          }
-          if (filters.formationYear) {
-            qb.orWhere(`EXTRACT(${tableRefName}.formation_year) = :formationYear`, { formationYear: filters.formationYear })
-          }
-        }));
+        queryBuilder.andWhere(
+          new Brackets((qb) => {
+            if (filters.name) {
+              qb.where(`LOWER(${tableRefName}.artist_name) LIKE :artistName`, {
+                artistName: filters.name + "%",
+              });
+            }
+            if (filters.country) {
+              qb.orWhere(`${tableRefName}.country_code LIKE :countryCode`, {
+                countryCode: filters.country,
+              });
+            }
+            if (filters.formationYear) {
+              qb.orWhere(`EXTRACT(${tableRefName}.formation_year) = :formationYear`, {
+                formationYear: filters.formationYear,
+              });
+            }
+          }),
+        );
       }
       if (req.general_filter) {
-        queryBuilder.andWhere(new Brackets((qb) => {
-          qb.orWhere(`${tableRefName}.artist_name ILIKE :name`, { name: '%' + req.general_filter + '%' })
-          qb.orWhere(`${tableRefName}.country_code = :countryCode`, { countryCode: req.general_filter })
-        }));
+        queryBuilder.andWhere(
+          new Brackets((qb) => {
+            qb.orWhere(`${tableRefName}.artist_name ILIKE :name`, {
+              name: "%" + req.general_filter + "%",
+            });
+            qb.orWhere(`${tableRefName}.country_code = :countryCode`, {
+              countryCode: req.general_filter,
+            });
+          }),
+        );
       }
 
       const rowCounts = await queryBuilder.getCount();
@@ -192,8 +212,8 @@ export default class ArtistAdapter implements ArtistPort {
       const response: PaginationResponse<Artist> = PaginationResponse.create(
         list,
         list.length,
-        rowCounts
-      )
+        rowCounts,
+      );
       return ApplicationResponse.success(response);
     } catch (error: any) {
       return ApplicationResponse.failure(

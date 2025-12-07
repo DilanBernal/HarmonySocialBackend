@@ -24,7 +24,6 @@ describe("UserService", () => {
   let userCommandService: UserCommandService;
   let userQueryService: UserQueryService;
 
-
   const mockUserCommandPort: jest.Mocked<UserCommandPort> = createUserCommandPortMock();
   const mockUserQueryPort: jest.Mocked<UserQueryPort> = createUserQueryPortMock();
 
@@ -37,14 +36,13 @@ describe("UserService", () => {
 
   const mockEmailPort: jest.Mocked<EmailPort> = createEmailPortMock();
 
-  const mockLoggerPort: jest.Mocked<LoggerPort> = createLoggerPort()
+  const mockLoggerPort: jest.Mocked<LoggerPort> = createLoggerPort();
 
   const mockTokenPort: jest.Mocked<TokenPort> = createMockTokenPort();
 
   const mockUserRolePort: jest.Mocked<UserRolePort> = createUserRolePortMock();
 
   const mockRolePort: jest.Mocked<RolePort> = createRolePortMock();
-
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -59,12 +57,12 @@ describe("UserService", () => {
       mockTokenPort,
       mockLoggerPort,
     );
-    userQueryService = new UserQueryService(mockUserQueryPort, mockUserRolePort, mockLoggerPort)
+    userQueryService = new UserQueryService(mockUserQueryPort, mockUserRolePort, mockLoggerPort);
   });
 
   describe("paginacion", () => {
     it("Debe traer los usuarios correctamente", async () => {
-      const req: PaginationRequest<UserSearchParamsRequest> = PaginationRequest.create({}, 15,)
+      const req: PaginationRequest<UserSearchParamsRequest> = PaginationRequest.create({}, 15);
       const response = await userQueryService.searchUsers(req);
 
       expect(response.success).toBeTruthy();
@@ -82,9 +80,8 @@ describe("UserService", () => {
         username: "",
         password: "",
         profileImage: "",
-        favoriteInstrument: UserInstrument.GUITAR
-      }
-
-    })
-  })
+        favoriteInstrument: UserInstrument.GUITAR,
+      };
+    });
+  });
 });

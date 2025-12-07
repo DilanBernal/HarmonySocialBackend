@@ -1,4 +1,7 @@
-import RolePort, { RoleCreateData, RoleUpdateData } from "../../../../../../src/domain/ports/data/seg/RolePort";
+import RolePort, {
+  RoleCreateData,
+  RoleUpdateData,
+} from "../../../../../../src/domain/ports/data/seg/RolePort";
 import Role from "../../../../../../src/domain/models/seg/Role";
 
 // Helper function to create Role instances
@@ -7,9 +10,15 @@ const createMockRole = (
   name: string,
   description?: string,
   createdAt?: Date,
-  updatedAt?: Date
+  updatedAt?: Date,
 ): Role => {
-  return new Role(id, name, description, createdAt ?? new Date("2023-01-01"), updatedAt ?? new Date("2023-01-01"));
+  return new Role(
+    id,
+    name,
+    description,
+    createdAt ?? new Date("2023-01-01"),
+    updatedAt ?? new Date("2023-01-01"),
+  );
 };
 
 // Mock data para roles basados en el seed y la estructura real
@@ -24,11 +33,11 @@ let nextId = 4;
 
 const createRolePortMock = (): jest.Mocked<RolePort> => {
   const mockRoles = createMockRoles();
-  
+
   return {
     create: jest.fn().mockImplementation(async (data: RoleCreateData): Promise<number> => {
       // Verificar si ya existe un rol con ese nombre
-      const existing = mockRoles.find(r => r.name.toLowerCase() === data.name.toLowerCase());
+      const existing = mockRoles.find((r) => r.name.toLowerCase() === data.name.toLowerCase());
       if (existing) {
         throw new Error(`Role with name '${data.name}' already exists`);
       }
@@ -42,34 +51,36 @@ const createRolePortMock = (): jest.Mocked<RolePort> => {
       return newRole.id;
     }),
 
-    update: jest.fn().mockImplementation(async (id: number, data: RoleUpdateData): Promise<boolean> => {
-      const roleIndex = mockRoles.findIndex(r => r.id === id);
+    update: jest
+      .fn()
+      .mockImplementation(async (id: number, data: RoleUpdateData): Promise<boolean> => {
+        const roleIndex = mockRoles.findIndex((r) => r.id === id);
 
-      if (roleIndex === -1) {
-        return false; // Rol no encontrado
-      }
-
-      // Si se está actualizando el nombre, verificar que no exista otro rol con ese nombre
-      if (data.name) {
-        const existingWithName = mockRoles.find(r =>
-          r.name.toLowerCase() === data.name!.toLowerCase() && r.id !== id
-        );
-        if (existingWithName) {
-          throw new Error(`Role with name '${data.name}' already exists`);
+        if (roleIndex === -1) {
+          return false; // Rol no encontrado
         }
-      }
 
-      // Actualizar el rol
-      const existing = mockRoles[roleIndex];
-      if (data.name) existing.name = data.name;
-      if (data.description !== undefined) existing.description = data.description;
-      existing.updatedAt = new Date();
+        // Si se está actualizando el nombre, verificar que no exista otro rol con ese nombre
+        if (data.name) {
+          const existingWithName = mockRoles.find(
+            (r) => r.name.toLowerCase() === data.name!.toLowerCase() && r.id !== id,
+          );
+          if (existingWithName) {
+            throw new Error(`Role with name '${data.name}' already exists`);
+          }
+        }
 
-      return true;
-    }),
+        // Actualizar el rol
+        const existing = mockRoles[roleIndex];
+        if (data.name) existing.name = data.name;
+        if (data.description !== undefined) existing.description = data.description;
+        existing.updatedAt = new Date();
+
+        return true;
+      }),
 
     delete: jest.fn().mockImplementation(async (id: number): Promise<boolean> => {
-      const roleIndex = mockRoles.findIndex(r => r.id === id);
+      const roleIndex = mockRoles.findIndex((r) => r.id === id);
 
       if (roleIndex === -1) {
         return false; // Rol no encontrado
@@ -81,12 +92,12 @@ const createRolePortMock = (): jest.Mocked<RolePort> => {
     }),
 
     findById: jest.fn().mockImplementation(async (id: number): Promise<Role | null> => {
-      const role = mockRoles.find(r => r.id === id);
+      const role = mockRoles.find((r) => r.id === id);
       return role ?? null;
     }),
 
     findByName: jest.fn().mockImplementation(async (name: string): Promise<Role | null> => {
-      const role = mockRoles.find(r => r.name.toLowerCase() === name.toLowerCase());
+      const role = mockRoles.find((r) => r.name.toLowerCase() === name.toLowerCase());
       return role ?? null;
     }),
 
@@ -94,6 +105,6 @@ const createRolePortMock = (): jest.Mocked<RolePort> => {
       return [...mockRoles];
     }),
   };
-}
+};
 
 export default createRolePortMock;

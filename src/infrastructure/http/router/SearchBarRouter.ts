@@ -13,7 +13,11 @@ const router = Router();
 const userQueryPort: UserPublicProfileQueryPort = new UserPublicProfileQueryAdapter();
 const artistQueryPort: ArtistQueryPort = new ArtistQueryAdapter();
 const songQueryPort: SongQueryPort = new SongQueryAdapter();
-const searchBarService: SearchBarService = new SearchBarService(userQueryPort, artistQueryPort, songQueryPort);
+const searchBarService: SearchBarService = new SearchBarService(
+  userQueryPort,
+  artistQueryPort,
+  songQueryPort,
+);
 const searchBarController: SearchBarController = new SearchBarController(searchBarService);
 
 router.get("", async (req: Request, res: Response) => {

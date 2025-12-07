@@ -3,7 +3,6 @@ import PermissionService from "../../../application/services/seg/permission/Perm
 import PermissionAdapter from "../../adapter/data/seg/PermissionAdapter";
 import PermissionController from "../../controller/PermissionController";
 
-
 const adapter = new PermissionAdapter();
 const service = new PermissionService(adapter);
 const controller = new PermissionController(service);

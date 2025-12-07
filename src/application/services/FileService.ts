@@ -13,7 +13,7 @@ export default class FileService {
   constructor(
     private readonly filePort: FilePort,
     private readonly logger: LoggerAdapter,
-  ) { }
+  ) {}
 
   /** Convierte ApplicationResponse<T> -> T o lanza ApplicationError */
   private unwrap<T>(resp: ApplicationResponse<T>): T {

@@ -25,7 +25,13 @@ const commandAdapter = new ArtistCommandAdapter();
 const logger = new LoggerAdapter();
 const roleAdapter = new RoleAdapter();
 const userRoleAdapter = new UserRoleAdapter();
-const service = new ArtistService(queryAdapter, commandAdapter, logger, roleAdapter, userRoleAdapter);
+const service = new ArtistService(
+  queryAdapter,
+  commandAdapter,
+  logger,
+  roleAdapter,
+  userRoleAdapter,
+);
 const controller = new ArtistController(service, logger);
 
 // Public endpoint: allows anyone to submit an artist request (stays PENDING)
@@ -44,7 +50,12 @@ router.get("/", (req, res) => controller.search(req, res));
 router.get("/search", (req, res) => controller.search(req, res));
 router.get("/id/:id", (req, res) => controller.getById(req, res));
 
-router.get("/paginated", parseNestedQuery, validatePaginatedRequest(artistPaginatedRequestValidator), async (req, res) => await controller.search(req, res));
+router.get(
+  "/paginated",
+  parseNestedQuery,
+  validatePaginatedRequest(artistPaginatedRequestValidator),
+  async (req, res) => await controller.search(req, res),
+);
 
 router.put(
   ":id",

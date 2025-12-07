@@ -1,7 +1,7 @@
 import { ApplicationError, ErrorCodes } from "./ApplicationError";
 
 /**
- * @param message Es el mensaje completo que se va a mostrar 
+ * @param message Es el mensaje completo que se va a mostrar
  * @param entity Se reemplazara un mensaje predetermiado por este parametro de entidad
  * @example message: `No se puede mandar la solicitud de 'x' vacia`
  * @example entity: No se puede procesar la solicitude de ${errorDetails.entity} vacia
@@ -16,7 +16,7 @@ export type emptyRequestErrorDetails = {
  */
 export default class EmptyRequestError extends ApplicationError {
   /**
-   * 
+   *
    * @param errorDetails Detalles del error
    * @param details Detalles opcionales para agregar al error
    * @param originalError Error original opcional, puede no estar ya que es una validacion anterior.

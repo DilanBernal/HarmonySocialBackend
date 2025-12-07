@@ -6,7 +6,10 @@ import FriendshipPort from "../../../../domain/ports/data/social/FriendshipPort"
 import FriendshipEntity from "../../../entities/Sql/social/FriendshipEntity";
 import { SqlAppDataSource } from "../../../config/con_database";
 import Friendship, { FrienshipStatus } from "../../../../domain/models/social/Friendship";
-import { ApplicationError, ErrorCodes } from "../../../../application/shared/errors/ApplicationError";
+import {
+  ApplicationError,
+  ErrorCodes,
+} from "../../../../application/shared/errors/ApplicationError";
 
 export default class FriendshipAdapter implements FriendshipPort {
   private frienshipRepository: Repository<FriendshipEntity>;
@@ -42,18 +45,14 @@ export default class FriendshipAdapter implements FriendshipPort {
         user_id: x.userId,
         friend_id: x.friendId,
         status: x.status,
-      }))
+      })),
     };
     return friendshipResponse;
   }
 
   async createFriendship(req: FriendshipUsersIdsRequest): Promise<ApplicationResponse<boolean>> {
     try {
-      const frienshipEntity = this.toEntity(
-        req.user_id,
-        req.friend_id,
-        FrienshipStatus.PENDING,
-      );
+      const frienshipEntity = this.toEntity(req.user_id, req.friend_id, FrienshipStatus.PENDING);
 
       const result = await this.frienshipRepository.save(frienshipEntity);
       if (result) {
@@ -179,7 +178,7 @@ export default class FriendshipAdapter implements FriendshipPort {
       ];
       const entities = await this.frienshipRepository.find({ where: whereCondition });
 
-      const response = this.toFriendshipsResponse(entities.map(e => this.toDomain(e)));
+      const response = this.toFriendshipsResponse(entities.map((e) => this.toDomain(e)));
       return ApplicationResponse.success(response);
     } catch (error) {
       return ApplicationResponse.failure(new ApplicationError("", ErrorCodes.SERVER_ERROR));
@@ -199,14 +198,17 @@ export default class FriendshipAdapter implements FriendshipPort {
       }
 
       // Mapear filas a modelos de dominio (Friendship)
-      const domainList: Friendship[] = rows.map((r: any) => new Friendship(
-        Number(r.id),
-        Number(r.user_id),
-        Number(r.friend_id),
-        (r.status as FrienshipStatus) ?? FrienshipStatus.ACCEPTED,
-        new Date(r.created_at),
-        r.updated_at ? new Date(r.updated_at) : undefined,
-      ));
+      const domainList: Friendship[] = rows.map(
+        (r: any) =>
+          new Friendship(
+            Number(r.id),
+            Number(r.user_id),
+            Number(r.friend_id),
+            (r.status as FrienshipStatus) ?? FrienshipStatus.ACCEPTED,
+            new Date(r.created_at),
+            r.updated_at ? new Date(r.updated_at) : undefined,
+          ),
+      );
 
       const response = this.toFriendshipsResponse(domainList);
       return ApplicationResponse.success(response);
@@ -226,7 +228,7 @@ export default class FriendshipAdapter implements FriendshipPort {
       ];
       const entities = await this.frienshipRepository.find({ where: whereCondition });
 
-      const response = this.toFriendshipsResponse(entities.map(e => this.toDomain(e)));
+      const response = this.toFriendshipsResponse(entities.map((e) => this.toDomain(e)));
       return ApplicationResponse.success(response);
     } catch (error) {
       return ApplicationResponse.failure(new ApplicationError("", ErrorCodes.SERVER_ERROR));

@@ -1,6 +1,9 @@
 import { SqlAppDataSource } from "../../../config/con_database";
 import { RoleEntity } from "../../../entities/Sql/seg";
-import RolePort, { RoleCreateData, RoleUpdateData } from "../../../../domain/ports/data/seg/RolePort";
+import RolePort, {
+  RoleCreateData,
+  RoleUpdateData,
+} from "../../../../domain/ports/data/seg/RolePort";
 import Role from "../../../../domain/models/seg/Role";
 
 export default class RoleAdapter implements RolePort {
@@ -39,11 +42,12 @@ export default class RoleAdapter implements RolePort {
 
   async findByName(name: string): Promise<Role | null> {
     const r = await this.repo.findOne({
-      where: { name }, select: {
+      where: { name },
+      select: {
         id: true,
         name: true,
         created_at: true,
-      }
+      },
     });
     return r ? this.toDomain(r) : null;
   }

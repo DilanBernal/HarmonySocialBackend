@@ -9,7 +9,7 @@ export default class UserRoleService {
     private userRolePort: UserRolePort,
     private rolePort: RolePort,
     private logger: LoggerPort,
-  ) { }
+  ) {}
 
   async assign(userId: number, roleId: number): Promise<ApplicationResponse<void>> {
     try {

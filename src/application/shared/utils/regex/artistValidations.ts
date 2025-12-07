@@ -10,24 +10,23 @@ const createFormationYearRegex = (extraYears: number): RegExp => {
 export const artistValidations: Array<ValidationType> = [
   {
     name: "artist_name",
-    regex: /^[\p{L}\p{N}\s\-'.\(\)\[\]&,!?°º]+$/u
+    regex: /^[\p{L}\p{N}\s\-'.\(\)\[\]&,!?°º]+$/u,
   },
   {
     name: "country_code",
-    regex: /^[A-Z]{3}$/
+    regex: /^[A-Z]{3}$/,
   },
   {
     name: "artist_biography",
-    regex: /^[\p{L}\p{N}\p{P}\p{S}\s]*$/u
+    regex: /^[\p{L}\p{N}\p{P}\p{S}\s]*$/u,
   },
 
   {
     name: "formation_year",
-    regex: createFormationYearRegex(10)
+    regex: createFormationYearRegex(10),
   },
   {
     name: "user_id",
-    regex: /^[1-9]\d*$/
+    regex: /^[1-9]\d*$/,
   },
 ];
-

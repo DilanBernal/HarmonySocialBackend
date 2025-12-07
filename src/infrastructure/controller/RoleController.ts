@@ -8,7 +8,7 @@ export default class RoleController {
   constructor(
     private service: RoleService,
     private logger: LoggerPort,
-  ) { }
+  ) {}
 
   async create(req: Request, res: Response) {
     try {

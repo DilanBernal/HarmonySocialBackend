@@ -1,9 +1,18 @@
-import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import UserEntity from "../seg/UserEntity";
 import SongEntity from "../music/SongEntity";
 import Post from "../../../../domain/models/social/Post";
 
-@Entity({ name: 'post', schema: "social" })
+@Entity({ name: "post", schema: "social" })
 export default class PostEntity {
   @PrimaryGeneratedColumn({ type: "bigint", primaryKeyConstraintName: "PK_post_id" })
   id!: number;

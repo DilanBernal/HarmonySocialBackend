@@ -21,6 +21,6 @@ const createLoggerPort = (): jest.Mocked<LoggerPort> => {
     appFatal: jest.fn(),
     setLevel: jest.fn(),
   } as unknown as jest.Mocked<LoggerPort>;
-}
+};
 
 export default createLoggerPort;

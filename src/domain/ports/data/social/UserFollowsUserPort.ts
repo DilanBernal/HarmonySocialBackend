@@ -1,4 +1,3 @@
-
 import UserFollowsUser from "../../../models/social/UserFollowsUser";
 
 export interface UserFollowRepository {

@@ -3,7 +3,7 @@ import { ApplicationResponse } from "../shared/ApplicationReponse";
 import { ApplicationError, ErrorCodes } from "../shared/errors/ApplicationError";
 
 export default class RolePermissionService {
-  constructor(private rolePermissionPort: RolePermissionPort) { }
+  constructor(private rolePermissionPort: RolePermissionPort) {}
 
   async assign(roleId: number, permissionId: number) {
     if (!roleId || roleId <= 0 || !permissionId || permissionId <= 0) {

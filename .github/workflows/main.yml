@@ -6,9 +6,9 @@ on:
 env:
   # Variables globales no sensibles
   PORT: 4666
-  LOG_LEVEL: 'info'
-  PASSWORD_SALT: '14'
-  FRONTEND_URL: 'https://your-frontend.azurewebsites.net'
+  LOG_LEVEL: "info"
+  PASSWORD_SALT: "14"
+  FRONTEND_URL: "https://your-frontend.azurewebsites.net"
 
 jobs:
   build:
@@ -22,7 +22,7 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: '22.x'
+          node-version: "22.x"
 
       - name: Install dependencies and build
         run: |
@@ -34,9 +34,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: ./Backend  # ← Sube solo la carpeta Backend
+          path: ./Backend # ← Sube solo la carpeta Backend
 
-  reseed:  # ← NUEVO JOB SEPARADO para el reseed
+  reseed: # ← NUEVO JOB SEPARADO para el reseed
     runs-on: ubuntu-latest
     environment: prod_env
     needs: build
@@ -50,7 +50,7 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: '22.x'
+          node-version: "22.x"
 
       - name: Install production dependencies
         run: |
@@ -66,11 +66,11 @@ jobs:
           DB_SCHEMA: ${{ secrets.DB_SCHEMA }}
           DB_SYNC: ${{ secrets.DB_SYNC }}
           DB_PORT: ${{ secrets.DB_PORT }}
-          
+
           # App configuration
           PORT: ${{ env.PORT }}
-          NODE_ENV: 'production'
-          ENVIRONMENT: 'production'
+          NODE_ENV: "production"
+          ENVIRONMENT: "production"
           LOG_LEVEL: ${{ env.LOG_LEVEL }}
 
           # Security

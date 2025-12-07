@@ -5,13 +5,7 @@ export default class Role {
   private _createdAt!: Date;
   private _updatedAt?: Date;
 
-  constructor(
-    id: number,
-    name: string,
-    description?: string,
-    createdAt?: Date,
-    updatedAt?: Date,
-  ) {
+  constructor(id: number, name: string, description?: string, createdAt?: Date, updatedAt?: Date) {
     this.id = id;
     this.name = name;
     this.description = description;

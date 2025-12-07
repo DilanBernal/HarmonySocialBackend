@@ -14,7 +14,7 @@ const createMockArtist = (
   countryCode: string | undefined,
   status: ArtistStatus,
   createdAt: Date,
-  updatedAt?: Date
+  updatedAt?: Date,
 ): Artist => {
   return new Artist(
     id,
@@ -33,16 +33,40 @@ const createMockArtist = (
 // Mock data for artists
 const createMockArtists = (): Artist[] => [
   createMockArtist(
-    1, 1, "Test Artist", "A test artist biography", true, 2020, "USA", ArtistStatus.ACTIVE,
-    new Date("2023-01-01"), new Date("2023-06-01")
+    1,
+    1,
+    "Test Artist",
+    "A test artist biography",
+    true,
+    2020,
+    "USA",
+    ArtistStatus.ACTIVE,
+    new Date("2023-01-01"),
+    new Date("2023-06-01"),
   ),
   createMockArtist(
-    2, 2, "Pending Artist", "Waiting for approval", false, 2021, "MEX", ArtistStatus.PENDING,
-    new Date("2023-02-01"), undefined
+    2,
+    2,
+    "Pending Artist",
+    "Waiting for approval",
+    false,
+    2021,
+    "MEX",
+    ArtistStatus.PENDING,
+    new Date("2023-02-01"),
+    undefined,
   ),
   createMockArtist(
-    3, undefined, "Admin Created Artist", "Created by admin", true, 2019, "COL", ArtistStatus.ACTIVE,
-    new Date("2023-03-01"), new Date("2023-07-01")
+    3,
+    undefined,
+    "Admin Created Artist",
+    "Created by admin",
+    true,
+    2019,
+    "COL",
+    ArtistStatus.ACTIVE,
+    new Date("2023-03-01"),
+    new Date("2023-07-01"),
   ),
 ];
 
@@ -50,18 +74,17 @@ const createArtistQueryPortMock = (): jest.Mocked<ArtistQueryPort> => {
   const artists = createMockArtists();
 
   return {
-    findById: jest.fn().mockImplementation(
-      async (id: number): Promise<Result<Artist>> => {
-        const artist = artists.find((a) => a.id === id);
-        if (!artist) {
-          return Result.fail(new Error("Artista no encontrado"));
-        }
-        return Result.ok(artist);
+    findById: jest.fn().mockImplementation(async (id: number): Promise<Result<Artist>> => {
+      const artist = artists.find((a) => a.id === id);
+      if (!artist) {
+        return Result.fail(new Error("Artista no encontrado"));
       }
-    ),
+      return Result.ok(artist);
+    }),
 
-    findByFilters: jest.fn().mockImplementation(
-      async (filters: ArtistFilters): Promise<Result<Artist>> => {
+    findByFilters: jest
+      .fn()
+      .mockImplementation(async (filters: ArtistFilters): Promise<Result<Artist>> => {
         let filteredArtists = [...artists];
 
         if (filters.id) {
@@ -69,7 +92,7 @@ const createArtistQueryPortMock = (): jest.Mocked<ArtistQueryPort> => {
         }
         if (filters.artistName) {
           filteredArtists = filteredArtists.filter((a) =>
-            a.artistName.toLowerCase().includes(filters.artistName!.toLowerCase())
+            a.artistName.toLowerCase().includes(filters.artistName!.toLowerCase()),
           );
         }
         if (filters.countryCode) {
@@ -80,16 +103,16 @@ const createArtistQueryPortMock = (): jest.Mocked<ArtistQueryPort> => {
           return Result.fail(new Error("Artista no encontrado"));
         }
         return Result.ok(filteredArtists[0]);
-      }
-    ),
+      }),
 
-    searchByFilters: jest.fn().mockImplementation(
-      async (filters: ArtistFilters): Promise<Result<Artist[]>> => {
+    searchByFilters: jest
+      .fn()
+      .mockImplementation(async (filters: ArtistFilters): Promise<Result<Artist[]>> => {
         let filteredArtists = [...artists];
 
         if (filters.artistName) {
           filteredArtists = filteredArtists.filter((a) =>
-            a.artistName.toLowerCase().includes(filters.artistName!.toLowerCase())
+            a.artistName.toLowerCase().includes(filters.artistName!.toLowerCase()),
           );
         }
         if (filters.verified !== undefined) {
@@ -99,27 +122,27 @@ const createArtistQueryPortMock = (): jest.Mocked<ArtistQueryPort> => {
           filteredArtists = filteredArtists.filter((a) => a.countryCode === filters.countryCode);
         }
         if (filters.formationYear) {
-          filteredArtists = filteredArtists.filter((a) => a.formationYear === filters.formationYear);
+          filteredArtists = filteredArtists.filter(
+            (a) => a.formationYear === filters.formationYear,
+          );
         }
 
         return Result.ok(filteredArtists);
-      }
-    ),
+      }),
 
-    existsById: jest.fn().mockImplementation(
-      async (id: number): Promise<Result<boolean>> => {
-        const exists = artists.some((a) => a.id === id);
-        return Result.ok(exists);
-      }
-    ),
+    existsById: jest.fn().mockImplementation(async (id: number): Promise<Result<boolean>> => {
+      const exists = artists.some((a) => a.id === id);
+      return Result.ok(exists);
+    }),
 
-    existsByFilters: jest.fn().mockImplementation(
-      async (filters: ArtistFilters): Promise<Result<boolean>> => {
+    existsByFilters: jest
+      .fn()
+      .mockImplementation(async (filters: ArtistFilters): Promise<Result<boolean>> => {
         let filteredArtists = [...artists];
 
         if (filters.artistName) {
           filteredArtists = filteredArtists.filter((a) =>
-            a.artistName.toLowerCase().includes(filters.artistName!.toLowerCase())
+            a.artistName.toLowerCase().includes(filters.artistName!.toLowerCase()),
           );
         }
         if (filters.countryCode) {
@@ -127,8 +150,7 @@ const createArtistQueryPortMock = (): jest.Mocked<ArtistQueryPort> => {
         }
 
         return Result.ok(filteredArtists.length > 0);
-      }
-    ),
+      }),
   };
 };
 

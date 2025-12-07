@@ -36,13 +36,7 @@ export default class PermissionEntity {
    * Converts this entity to a domain object
    */
   toDomain(): Permission {
-    return new Permission(
-      this.id,
-      this.name,
-      this.description,
-      this.created_at,
-      this.updated_at,
-    );
+    return new Permission(this.id, this.name, this.description, this.created_at, this.updated_at);
   }
 
   /**

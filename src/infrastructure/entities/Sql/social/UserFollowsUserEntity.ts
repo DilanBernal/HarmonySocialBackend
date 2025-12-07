@@ -29,12 +29,7 @@ export default class UserFollowEntity {
       throw new Error("Cannot convert to domain: follower or followed user is missing");
     }
 
-    return new UserFollowsUser(
-      this.id,
-      followerId,
-      followedId,
-      this.createdAt,
-    );
+    return new UserFollowsUser(this.id, followerId, followedId, this.createdAt);
   }
 
   /**

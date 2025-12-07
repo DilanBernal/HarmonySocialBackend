@@ -6,16 +6,15 @@ export default class PaginationRequest<T> {
   private _last_id?: number | undefined;
   private _first_id?: number | undefined;
 
-
   /**
-   * 
+   *
    * @param filters Filtros que se van a aplicar a la query
    * @param pageSize El tamaño de pagina, si no se especifica por algun motivo, se le va a asignar 5
    * @param generalFilter El filtro general aplicado a la query
    * @param pageNumber El numero de pagina que se va a tomar si aplica
    * @param firstId El primer id que se tomo, se usa para la paginacion para hacer un between si trae tambien el ultimo o para hacer la paginacion en reversa
    * @param lastId El primer id que se tomo, se usa para la paginacion para hacer un between si trae tambien el primero o para hacer la paginacion para adelante
-   * @returns Instancia de la clase 
+   * @returns Instancia de la clase
    */
   public static create<T>(
     filters: T,

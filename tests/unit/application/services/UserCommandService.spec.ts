@@ -12,7 +12,10 @@ import UpdateUserRequest from "../../../../src/application/dto/requests/User/Upd
 import { UserInstrument, UserStatus } from "../../../../src/domain/models/seg/User";
 import Role from "../../../../src/domain/models/seg/Role";
 import { ApplicationResponse } from "../../../../src/application/shared/ApplicationReponse";
-import { ApplicationError, ErrorCodes } from "../../../../src/application/shared/errors/ApplicationError";
+import {
+  ApplicationError,
+  ErrorCodes,
+} from "../../../../src/application/shared/errors/ApplicationError";
 import Result from "../../../../src/domain/shared/Result";
 
 import createUserCommandPortMock from "../../mocks/ports/data/seg/UserCommandPort.mock";
@@ -25,11 +28,7 @@ import { createMockTokenPort } from "../../mocks/ports/utils/TokenPort.mock";
 import createLoggerPort from "../../mocks/ports/extra/LoggerPort.mock";
 
 // Helper function to create test Role instances
-const createTestRole = (
-  id: number,
-  name: string,
-  description?: string
-): Role => {
+const createTestRole = (id: number, name: string, description?: string): Role => {
   return new Role(id, name, description, new Date(), new Date());
 };
 
@@ -81,7 +80,7 @@ describe("UserCommandService", () => {
       mockAuthPort,
       mockEmailPort,
       mockTokenPort,
-      mockLoggerPort
+      mockLoggerPort,
     );
   });
 
@@ -121,7 +120,7 @@ describe("UserCommandService", () => {
         expect(mockUserCommandPort.createUser).toHaveBeenCalledWith(
           expect.objectContaining({
             status: UserStatus.SUSPENDED,
-          })
+          }),
         );
       });
     });
@@ -174,9 +173,7 @@ describe("UserCommandService", () => {
         mockRolePort.findByName.mockResolvedValue(createTestRole(1, "common_user", "Regular user"));
         mockAuthPort.encryptPassword.mockResolvedValue("$2b$10$hashedPassword");
         mockTokenPort.generateStamp.mockReturnValue("mock-stamp");
-        mockUserCommandPort.createUser.mockResolvedValue(
-          Result.fail(new Error("Database error"))
-        );
+        mockUserCommandPort.createUser.mockResolvedValue(Result.fail(new Error("Database error")));
 
         const result = await userCommandService.registerUser(validRegisterRequest);
 
@@ -204,7 +201,7 @@ describe("UserCommandService", () => {
     describe("Casos de Error - Excepciones", () => {
       it("debe manejar excepciones inesperadas", async () => {
         mockUserQueryPort.existsActiveUserByFilters.mockRejectedValue(
-          new Error("Unexpected error")
+          new Error("Unexpected error"),
         );
 
         const result = await userCommandService.registerUser(validRegisterRequest);
@@ -232,7 +229,7 @@ describe("UserCommandService", () => {
             fullName: "Updated Name",
             email: "updated@example.com",
             username: "updateduser",
-          })
+          }),
         );
       });
 
@@ -258,7 +255,7 @@ describe("UserCommandService", () => {
           expect.objectContaining({
             password: "$2b$10$newHashedPassword",
             securityStamp: "new-security-stamp",
-          })
+          }),
         );
       });
     });
@@ -307,7 +304,7 @@ describe("UserCommandService", () => {
             id: 2, // Different user
             email: "other@example.com",
             username: "otheruser",
-          } as any)
+          } as any),
         );
 
         const result = await userCommandService.updateUser(1, validUpdateRequest);
@@ -324,7 +321,7 @@ describe("UserCommandService", () => {
             id: 1, // Same user
             email: "updated@example.com",
             username: "updateduser",
-          } as any)
+          } as any),
         );
         mockUserCommandPort.updateUser.mockResolvedValue(Result.ok(undefined));
 

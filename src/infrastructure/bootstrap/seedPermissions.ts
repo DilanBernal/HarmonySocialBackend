@@ -5,11 +5,7 @@ import {
   DefaultRolePermissionMapping,
   CorePermission,
 } from "../../domain/models/seg/Permission";
-import {
-  PermissionEntity,
-  RoleEntity,
-  RolePermissionEntity
-} from "../entities/Sql/seg";
+import { PermissionEntity, RoleEntity, RolePermissionEntity } from "../entities/Sql/seg";
 
 async function seed() {
   if (!SqlAppDataSource.isInitialized) await SqlAppDataSource.initialize();

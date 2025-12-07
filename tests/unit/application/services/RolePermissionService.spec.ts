@@ -1,17 +1,16 @@
 import RolePermissionService from "../../../../src/application/services/RolePermissionService";
 import RolePermissionPort from "../../../../src/domain/ports/data/seg/RolePermissionPort";
 import { ApplicationResponse } from "../../../../src/application/shared/ApplicationReponse";
-import { ApplicationError, ErrorCodes } from "../../../../src/application/shared/errors/ApplicationError";
+import {
+  ApplicationError,
+  ErrorCodes,
+} from "../../../../src/application/shared/errors/ApplicationError";
 import Permission, { CorePermission } from "../../../../src/domain/models/seg/Permission";
 
 import createRolePermissionPortMock from "../../mocks/ports/data/seg/RolePermissionPort.mock";
 
 // Helper function to create test Permission instances
-const createTestPermission = (
-  id: number,
-  name: string,
-  description?: string
-): Permission => {
+const createTestPermission = (id: number, name: string, description?: string): Permission => {
   return new Permission(id, name, description, new Date("2023-01-01"), new Date("2023-01-01"));
 };
 
@@ -101,8 +100,8 @@ describe("RolePermissionService", () => {
       it("debe propagar error del puerto", async () => {
         mockRolePermissionPort.assign.mockResolvedValue(
           ApplicationResponse.failure(
-            new ApplicationError("Permission not found", ErrorCodes.VALUE_NOT_FOUND)
-          )
+            new ApplicationError("Permission not found", ErrorCodes.VALUE_NOT_FOUND),
+          ),
         );
 
         const result = await rolePermissionService.assign(1, 999);
@@ -161,8 +160,8 @@ describe("RolePermissionService", () => {
       it("debe propagar error del puerto cuando el permiso no está asignado", async () => {
         mockRolePermissionPort.unassign.mockResolvedValue(
           ApplicationResponse.failure(
-            new ApplicationError("Permission not assigned to role", ErrorCodes.VALUE_NOT_FOUND)
-          )
+            new ApplicationError("Permission not assigned to role", ErrorCodes.VALUE_NOT_FOUND),
+          ),
         );
 
         const result = await rolePermissionService.unassign(1, 999);
@@ -177,7 +176,7 @@ describe("RolePermissionService", () => {
     describe("Casos Exitosos", () => {
       it("debe listar permisos de un rol exitosamente", async () => {
         mockRolePermissionPort.getPermissionsByRole.mockResolvedValue(
-          ApplicationResponse.success(mockPermissions)
+          ApplicationResponse.success(mockPermissions),
         );
 
         const result = await rolePermissionService.listByRole(1);
@@ -191,7 +190,7 @@ describe("RolePermissionService", () => {
 
       it("debe retornar lista vacía para rol sin permisos", async () => {
         mockRolePermissionPort.getPermissionsByRole.mockResolvedValue(
-          ApplicationResponse.success([])
+          ApplicationResponse.success([]),
         );
 
         const result = await rolePermissionService.listByRole(99);
@@ -230,8 +229,8 @@ describe("RolePermissionService", () => {
       it("debe propagar error del puerto", async () => {
         mockRolePermissionPort.getPermissionsByRole.mockResolvedValue(
           ApplicationResponse.failure(
-            new ApplicationError("Database error", ErrorCodes.DATABASE_ERROR)
-          )
+            new ApplicationError("Database error", ErrorCodes.DATABASE_ERROR),
+          ),
         );
 
         const result = await rolePermissionService.listByRole(1);

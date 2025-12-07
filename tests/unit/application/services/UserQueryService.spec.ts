@@ -32,7 +32,7 @@ describe("UserQueryService", () => {
     "mock-concurrency-stamp",
     "mock-security-stamp",
     new Date("2023-01-01"),
-    new Date("2023-01-01")
+    new Date("2023-01-01"),
   );
 
   const mockUsers = [
@@ -50,7 +50,7 @@ describe("UserQueryService", () => {
       "mock-concurrency-stamp-2",
       "mock-security-stamp-2",
       new Date("2023-01-02"),
-      new Date("2023-01-02")
+      new Date("2023-01-02"),
     ),
   ];
 
@@ -61,11 +61,7 @@ describe("UserQueryService", () => {
     mockUserRolePort = createUserRolePortMock();
     mockLoggerPort = createLoggerPort();
 
-    userQueryService = new UserQueryService(
-      mockUserQueryPort,
-      mockUserRolePort,
-      mockLoggerPort
-    );
+    userQueryService = new UserQueryService(mockUserQueryPort, mockUserRolePort, mockLoggerPort);
   });
 
   describe("getAllUsers", () => {
@@ -98,7 +94,7 @@ describe("UserQueryService", () => {
       it("debe manejar error del puerto de usuarios", async () => {
         mockUserRolePort.listUsersForRole.mockResolvedValue([1, 2]);
         mockUserQueryPort.searchActiveUsersByIds.mockResolvedValue(
-          Result.fail(new Error("DB error"))
+          Result.fail(new Error("DB error")),
         );
 
         const result = await userQueryService.getAllUsers();
@@ -162,7 +158,7 @@ describe("UserQueryService", () => {
     describe("Casos de Error - Usuario No Encontrado", () => {
       it("debe fallar cuando el usuario no existe", async () => {
         mockUserQueryPort.getUserById.mockResolvedValue(
-          Result.fail(new Error("Usuario no encontrado"))
+          Result.fail(new Error("Usuario no encontrado")),
         );
 
         const result = await userQueryService.getUserById(999);
@@ -232,7 +228,7 @@ describe("UserQueryService", () => {
     describe("Casos de Error - Usuario No Encontrado", () => {
       it("debe fallar cuando el usuario no existe", async () => {
         mockUserQueryPort.getUserByFilters.mockResolvedValue(
-          Result.fail(new Error("Usuario no encontrado"))
+          Result.fail(new Error("Usuario no encontrado")),
         );
 
         const result = await userQueryService.getUserByEmail("nonexistent@example.com");
@@ -284,7 +280,7 @@ describe("UserQueryService", () => {
       it("debe fallar cuando no se puede obtener el usuario", async () => {
         mockUserQueryPort.existsActiveUserById.mockResolvedValue(Result.ok(true));
         mockUserQueryPort.getUserById.mockResolvedValue(
-          Result.fail(new Error("Usuario no encontrado"))
+          Result.fail(new Error("Usuario no encontrado")),
         );
 
         const result = await userQueryService.getUserData(1);
@@ -326,7 +322,7 @@ describe("UserQueryService", () => {
             email: "test",
             username: "user",
           },
-          10
+          10,
         );
 
         mockUserQueryPort.searchActiveUserByFilters.mockResolvedValue(Result.ok([mockUser]));
@@ -338,7 +334,7 @@ describe("UserQueryService", () => {
           expect.objectContaining({
             email: "test",
             username: "user",
-          })
+          }),
         );
       });
 
@@ -371,7 +367,7 @@ describe("UserQueryService", () => {
         const request = PaginationRequest.create<UserSearchParamsRequest>({}, 10);
 
         mockUserQueryPort.searchActiveUserByFilters.mockResolvedValue(
-          Result.fail(new Error("DB error"))
+          Result.fail(new Error("DB error")),
         );
 
         const result = await userQueryService.searchUsers(request);
@@ -383,7 +379,9 @@ describe("UserQueryService", () => {
       it("debe manejar excepciones inesperadas", async () => {
         const request = PaginationRequest.create<UserSearchParamsRequest>({}, 10);
 
-        mockUserQueryPort.searchActiveUserByFilters.mockRejectedValue(new Error("Unexpected error"));
+        mockUserQueryPort.searchActiveUserByFilters.mockRejectedValue(
+          new Error("Unexpected error"),
+        );
 
         const result = await userQueryService.searchUsers(request);
 

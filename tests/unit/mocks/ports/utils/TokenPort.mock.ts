@@ -7,15 +7,15 @@ export const createMockTokenPort = (): jest.Mocked<TokenPort> => {
   const validTokens = new Map();
 
   // Generar tokens válidos para testing
-  const securityStamp = 'security_stamp_123';
-  const concurrencyStamp = 'concurrency_stamp_123';
+  const securityStamp = "security_stamp_123";
+  const concurrencyStamp = "concurrency_stamp_123";
   const validToken = jwt.sign(
-    { securityStamp, concurrencyStamp, stampsCombined: 'combined_123' },
-    'test_secret',
-    { expiresIn: '24h' }
+    { securityStamp, concurrencyStamp, stampsCombined: "combined_123" },
+    "test_secret",
+    { expiresIn: "24h" },
   );
 
-  validTokens.set(validToken, { securityStamp, concurrencyStamp, email: 'testuser@example.com' });
+  validTokens.set(validToken, { securityStamp, concurrencyStamp, email: "testuser@example.com" });
 
   return {
     generateStamp: jest.fn().mockReturnValue(uuidv4()),
@@ -26,10 +26,10 @@ export const createMockTokenPort = (): jest.Mocked<TokenPort> => {
       try {
         if (token === "valid_token_123") {
           return {
-            securityStamp: 'security_stamp_123',
-            concurrencyStamp: 'concurrency_stamp_123',
-            stampsCombined: 'combined_stamps_123',
-            email: 'testuser@example.com'
+            securityStamp: "security_stamp_123",
+            concurrencyStamp: "concurrency_stamp_123",
+            stampsCombined: "combined_stamps_123",
+            email: "testuser@example.com",
           };
         }
 

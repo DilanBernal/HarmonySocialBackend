@@ -25,7 +25,7 @@ export default class UserCommandService {
     private readonly emailPort: EmailPort,
     private readonly tokenPort: TokenPort,
     private readonly logger: LoggerPort,
-  ) { }
+  ) {}
 
   async registerUser(user: RegisterRequest): Promise<ApplicationResponse<number>> {
     if (!user) {

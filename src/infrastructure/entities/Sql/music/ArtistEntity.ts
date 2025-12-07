@@ -35,6 +35,15 @@ export default class ArtistEntity {
   user_id?: number;
 
   public toDomain(): Artist {
-    return new Artist(this.id, this.user_id, this.artist_name, this.biography, this.verified, this.formation_year, this.country_code, this.status);
+    return new Artist(
+      this.id,
+      this.user_id,
+      this.artist_name,
+      this.biography,
+      this.verified,
+      this.formation_year,
+      this.country_code,
+      this.status,
+    );
   }
 }

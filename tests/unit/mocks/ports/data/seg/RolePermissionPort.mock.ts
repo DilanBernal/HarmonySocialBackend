@@ -1,7 +1,13 @@
 import RolePermissionPort from "../../../../../../src/domain/ports/data/seg/RolePermissionPort";
 import { ApplicationResponse } from "../../../../../../src/application/shared/ApplicationReponse";
-import { ApplicationError, ErrorCodes } from "../../../../../../src/application/shared/errors/ApplicationError";
-import Permission, { CorePermission, DefaultRolePermissionMapping } from "../../../../../../src/domain/models/seg/Permission";
+import {
+  ApplicationError,
+  ErrorCodes,
+} from "../../../../../../src/application/shared/errors/ApplicationError";
+import Permission, {
+  CorePermission,
+  DefaultRolePermissionMapping,
+} from "../../../../../../src/domain/models/seg/Permission";
 
 // Helper function to create Permission instances
 const createMockPermission = (
@@ -9,9 +15,15 @@ const createMockPermission = (
   name: string,
   description?: string,
   createdAt?: Date,
-  updatedAt?: Date
+  updatedAt?: Date,
 ): Permission => {
-  return new Permission(id, name, description, createdAt ?? new Date("2023-01-01"), updatedAt ?? new Date("2023-01-01"));
+  return new Permission(
+    id,
+    name,
+    description,
+    createdAt ?? new Date("2023-01-01"),
+    updatedAt ?? new Date("2023-01-01"),
+  );
 };
 
 // Mock data for permissions based on seed structure
@@ -31,20 +43,20 @@ const rolePermissionsMap = new Map<number, number[]>([
 
 const createRolePermissionPortMock = (): jest.Mocked<RolePermissionPort> => {
   const mockPermissions = createMockPermissions();
-  
+
   return {
     assign: jest.fn().mockImplementation(async (roleId: number, permissionId: number) => {
       // Verify permission exists
-      const permissionExists = mockPermissions.some(p => p.id === permissionId);
+      const permissionExists = mockPermissions.some((p) => p.id === permissionId);
       if (!permissionExists) {
         return ApplicationResponse.failure(
-          new ApplicationError("Permission not found", ErrorCodes.VALUE_NOT_FOUND)
+          new ApplicationError("Permission not found", ErrorCodes.VALUE_NOT_FOUND),
         );
       }
 
       // Get current permissions for role
       const currentPermissions = rolePermissionsMap.get(roleId) || [];
-      
+
       // Check if already assigned
       if (currentPermissions.includes(permissionId)) {
         return ApplicationResponse.emptySuccess();
@@ -57,42 +69,42 @@ const createRolePermissionPortMock = (): jest.Mocked<RolePermissionPort> => {
 
     unassign: jest.fn().mockImplementation(async (roleId: number, permissionId: number) => {
       const currentPermissions = rolePermissionsMap.get(roleId) || [];
-      
+
       if (!currentPermissions.includes(permissionId)) {
         return ApplicationResponse.failure(
-          new ApplicationError("Permission not assigned to role", ErrorCodes.VALUE_NOT_FOUND)
+          new ApplicationError("Permission not assigned to role", ErrorCodes.VALUE_NOT_FOUND),
         );
       }
 
       // Remove permission
-      const updatedPermissions = currentPermissions.filter(p => p !== permissionId);
+      const updatedPermissions = currentPermissions.filter((p) => p !== permissionId);
       rolePermissionsMap.set(roleId, updatedPermissions);
       return ApplicationResponse.emptySuccess();
     }),
 
     getPermissionsByRole: jest.fn().mockImplementation(async (roleId: number) => {
       const permissionIds = rolePermissionsMap.get(roleId) || [];
-      const permissions = mockPermissions.filter(p => permissionIds.includes(p.id));
+      const permissions = mockPermissions.filter((p) => permissionIds.includes(p.id));
       return ApplicationResponse.success(permissions);
     }),
 
     getPermissionsByRoleNames: jest.fn().mockImplementation(async (roleNames: string[]) => {
       const allPermissions: Permission[] = [];
-      
+
       for (const roleName of roleNames) {
         const rolePermissionNames = DefaultRolePermissionMapping[roleName] || [];
-        const permissions = mockPermissions.filter(p => 
-          rolePermissionNames.includes(p.name as CorePermission)
+        const permissions = mockPermissions.filter((p) =>
+          rolePermissionNames.includes(p.name as CorePermission),
         );
-        
+
         // Add unique permissions
         for (const perm of permissions) {
-          if (!allPermissions.some(p => p.id === perm.id)) {
+          if (!allPermissions.some((p) => p.id === perm.id)) {
             allPermissions.push(perm);
           }
         }
       }
-      
+
       return ApplicationResponse.success(allPermissions);
     }),
   };

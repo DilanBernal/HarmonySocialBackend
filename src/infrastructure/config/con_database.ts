@@ -1,14 +1,19 @@
 import { Db, MongoClient, ServerApiVersion } from "mongodb";
 import { DataSource } from "typeorm";
 import { AlbumEntity, SongEntity, ArtistEntity, MusicTheoryEntity } from "../entities/Sql/music";
-import { PermissionEntity, UserEntity, UserRoleEntity, RoleEntity, RolePermissionEntity } from "../entities/Sql/seg";
-import * as SocialEntities from "../entities/Sql/social"
+import {
+  PermissionEntity,
+  UserEntity,
+  UserRoleEntity,
+  RoleEntity,
+  RolePermissionEntity,
+} from "../entities/Sql/seg";
+import * as SocialEntities from "../entities/Sql/social";
 import FriendshipEntity from "../entities/Sql/social/FriendshipEntity";
 import UserFollowEntity from "../entities/Sql/social/UserFollowsUserEntity";
 import envs from "./environment-vars";
 import LoggerAdapter from "../adapter/utils/LoggerAdapter";
 import LoggerPort from "../../domain/ports/utils/LoggerPort";
-
 
 const loggerAdapter: LoggerPort = new LoggerAdapter();
 
@@ -54,16 +59,15 @@ let mongoDb: Db | null = null;
 export const connectMongoDB = async (): Promise<Db> => {
   if (mongoDb) return mongoDb;
   try {
-
     mongoClient = new MongoClient(envs.DB_MONGO_CON_STRING, {
       serverApi: {
         version: ServerApiVersion.v1,
         strict: true,
-      }
+      },
     });
 
     await mongoClient.connect();
-    mongoDb = mongoClient.db('HarmonySocial');
+    mongoDb = mongoClient.db("HarmonySocial");
     loggerAdapter.info("Se inicio correctamente la base de datos NoSQL");
 
     return mongoDb;
@@ -71,7 +75,7 @@ export const connectMongoDB = async (): Promise<Db> => {
     loggerAdapter.error("Error conectando a MongoDB:", error);
     process.exit(1);
   }
-}
+};
 
 export const getMongoDB = (): Db => {
   if (!mongoClient) {
@@ -79,11 +83,11 @@ export const getMongoDB = (): Db => {
   }
 
   return mongoClient.db(envs.DB_MONGO_NAME);
-}
+};
 
 export const closeMongoDB = async () => {
   if (mongoClient) {
     await mongoClient.close();
     mongoClient = null;
   }
-} 
+};

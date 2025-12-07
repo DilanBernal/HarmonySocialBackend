@@ -4,7 +4,7 @@ import UserFollowsUser from "../../../../domain/models/social/UserFollowsUser";
 import { UserFollowRepository } from "../../../../domain/ports/data/social/UserFollowsUserPort";
 
 export class PostgresUserFollowRepository implements UserFollowRepository {
-  constructor(private pool: Pool) { }
+  constructor(private pool: Pool) {}
 
   async follow(followerId: number, followedId: number): Promise<UserFollowsUser> {
     const result = await this.pool.query(
@@ -17,12 +17,7 @@ export class PostgresUserFollowRepository implements UserFollowRepository {
     if (!result.rows[0]) throw new Error("Already following");
 
     const row = result.rows[0];
-    return new UserFollowsUser(
-      row.id,
-      row.follower_id,
-      row.followed_id,
-      new Date(row.created_at),
-    );
+    return new UserFollowsUser(row.id, row.follower_id, row.followed_id, new Date(row.created_at));
   }
 
   async unfollow(followerId: number, followedId: number): Promise<void> {
@@ -36,24 +31,20 @@ export class PostgresUserFollowRepository implements UserFollowRepository {
     const result = await this.pool.query(`SELECT * FROM user_follows_user WHERE followed_id = $1`, [
       userId,
     ]);
-    return result.rows.map((row) => new UserFollowsUser(
-      row.id,
-      row.follower_id,
-      row.followed_id,
-      new Date(row.created_at),
-    ));
+    return result.rows.map(
+      (row) =>
+        new UserFollowsUser(row.id, row.follower_id, row.followed_id, new Date(row.created_at)),
+    );
   }
 
   async getFollowing(userId: number): Promise<UserFollowsUser[]> {
     const result = await this.pool.query(`SELECT * FROM user_follows_user WHERE follower_id = $1`, [
       userId,
     ]);
-    return result.rows.map((row) => new UserFollowsUser(
-      row.id,
-      row.follower_id,
-      row.followed_id,
-      new Date(row.created_at),
-    ));
+    return result.rows.map(
+      (row) =>
+        new UserFollowsUser(row.id, row.follower_id, row.followed_id, new Date(row.created_at)),
+    );
   }
 
   async exists(followerId: number, followedId: number): Promise<boolean> {

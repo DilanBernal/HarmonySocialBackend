@@ -5,7 +5,7 @@ export class ApplicationResponse<T = void> {
     public readonly success: boolean,
     public readonly data?: T,
     public readonly error?: ApplicationError,
-  ) { }
+  ) {}
 
   static success<T>(data: T): ApplicationResponse<T> {
     return new ApplicationResponse(true, data, undefined);

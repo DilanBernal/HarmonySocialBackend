@@ -12,7 +12,7 @@ export default class ArtistController {
   constructor(
     private service: ArtistService,
     private logger: LoggerPort,
-  ) { }
+  ) {}
 
   async create(req: Request, res: Response) {
     const createRequest: ArtistCreateRequest = req.body;
@@ -65,17 +65,20 @@ export default class ArtistController {
   }
 
   async search(req: Request, res: Response) {
-    const { name, country, formationYear, verified } = req.parsedQuery?.filters as ArtistSearchFilters ?? {};
+    const { name, country, formationYear, verified } =
+      (req.parsedQuery?.filters as ArtistSearchFilters) ?? {};
     const { general_filter, page_size, page_number, last_id, first_id } = req.parsedQuery!;
     try {
-      const response = await this.service.search(PaginationRequest.create<ArtistSearchFilters>(
-        { country, name, formationYear, verified },
-        parseInt(page_size),
-        general_filter,
-        page_number,
-        first_id,
-        last_id
-      ));
+      const response = await this.service.search(
+        PaginationRequest.create<ArtistSearchFilters>(
+          { country, name, formationYear, verified },
+          parseInt(page_size),
+          general_filter,
+          page_number,
+          first_id,
+          last_id,
+        ),
+      );
       if (response.success) return res.status(200).json(response.data);
       return this.handleErrorResponse(res, response);
     } catch (e) {

@@ -1,6 +1,5 @@
 import { ValidationType } from "../regexIndex";
 
-
 export const userValidations: Array<ValidationType> = [
   { name: "usernameRegex", regex: /^[a-zA-Z0-9_*\-#$!|°.+]{2,50}$/ },
   {

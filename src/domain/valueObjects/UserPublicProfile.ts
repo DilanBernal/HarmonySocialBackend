@@ -8,5 +8,5 @@ export default class UserPublicProfile {
     public readonly activeFrom: number,
     public readonly learningPoints: number,
     public readonly favoriteInstrument: UserInstrument,
-  ) { }
+  ) {}
 }

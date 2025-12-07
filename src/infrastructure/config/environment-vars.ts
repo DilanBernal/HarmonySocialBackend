@@ -93,7 +93,7 @@ function loadEnvVars(): ReturnEnvironmentVars {
     AZURE_STORAGE_CONNECTION_STRING: value.AZURE_STORAGE_CONNECTION_STRING,
     LOG_LEVEL: value.LOG_LEVEL,
   };
-};
+}
 const envs = loadEnvVars();
 
 Object.freeze(envs);

@@ -9,7 +9,7 @@ const createTestFollow = (
   id: number,
   followerId: number,
   followedId: number,
-  createdAt?: Date
+  createdAt?: Date,
 ): UserFollowsUser => {
   return new UserFollowsUser(id, followerId, followedId, createdAt ?? new Date());
 };
@@ -97,9 +97,7 @@ describe("UserFollowService", () => {
   describe("getFollowers", () => {
     describe("Casos Exitosos", () => {
       it("debe obtener los seguidores de un usuario", async () => {
-        const mockFollowers: UserFollowsUser[] = [
-          createTestFollow(3, 2, 1),
-        ];
+        const mockFollowers: UserFollowsUser[] = [createTestFollow(3, 2, 1)];
 
         mockUserFollowRepo.getFollowers.mockResolvedValue(mockFollowers);
 

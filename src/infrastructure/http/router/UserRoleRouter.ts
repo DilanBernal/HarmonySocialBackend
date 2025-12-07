@@ -7,7 +7,7 @@ import LoggerAdapter from "../../adapter/utils/LoggerAdapter";
 import UserRoleController from "../../controller/UserRoleController";
 import authenticateToken from "../middleware/authMiddleware";
 import { validateRequest } from "../middleware/validateRequest";
-import UserRoleAssignValidator from "../../validator/seg/userRole/UserRoleAssignValidator";;
+import UserRoleAssignValidator from "../../validator/seg/userRole/UserRoleAssignValidator";
 
 const router = Router();
 const logger = new LoggerAdapter();

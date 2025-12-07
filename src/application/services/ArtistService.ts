@@ -6,7 +6,7 @@ import ArtistCommandPort from "../../domain/ports/data/music/command/ArtistComma
 import { ArtistSearchFilters } from "../dto/requests/Artist/ArtistSearchFilters";
 import ArtistCreateRequest from "../dto/requests/Artist/ArtistCreateRequest";
 import ArtistUpdateRequest from "../dto/requests/Artist/ArtistUpdateRequest";
-import ArtistResponse from '../dto/responses/ArtistResponse';
+import ArtistResponse from "../dto/responses/ArtistResponse";
 import LoggerPort from "../../domain/ports/utils/LoggerPort";
 import RolePort from "../../domain/ports/data/seg/RolePort";
 import UserRolePort from "../../domain/ports/data/seg/UserRolePort";
@@ -21,7 +21,7 @@ export default class ArtistService {
     private logger: LoggerPort,
     private rolePort: RolePort,
     private userRolePort: UserRolePort,
-  ) { }
+  ) {}
 
   async create(
     request: ArtistCreateRequest,
@@ -46,7 +46,12 @@ export default class ArtistService {
       const result = await this.commandPort.create(artist);
       if (!result.isSuccess) {
         return ApplicationResponse.failure(
-          new ApplicationError("Error al crear artista", ErrorCodes.DATABASE_ERROR, undefined, result.error),
+          new ApplicationError(
+            "Error al crear artista",
+            ErrorCodes.DATABASE_ERROR,
+            undefined,
+            result.error,
+          ),
         );
       }
       return ApplicationResponse.success(result.getValue());
@@ -75,7 +80,12 @@ export default class ArtistService {
       const result = await this.commandPort.create(artist);
       if (!result.isSuccess) {
         return ApplicationResponse.failure(
-          new ApplicationError("Error al crear artista", ErrorCodes.DATABASE_ERROR, undefined, result.error),
+          new ApplicationError(
+            "Error al crear artista",
+            ErrorCodes.DATABASE_ERROR,
+            undefined,
+            result.error,
+          ),
         );
       }
       return ApplicationResponse.success(result.getValue());
@@ -106,13 +116,17 @@ export default class ArtistService {
       if (request.artist_name) updateData.artistName = request.artist_name.trim();
       if (request.biography !== undefined) updateData.biography = request.biography?.trim();
       if (request.formation_year !== undefined) updateData.formationYear = request.formation_year;
-      if (request.country_code !== undefined)
-        updateData.countryCode = request.country_code?.trim();
+      if (request.country_code !== undefined) updateData.countryCode = request.country_code?.trim();
       // status changes not allowed here
       const result = await this.commandPort.update(id, updateData);
       if (!result.isSuccess) {
         return ApplicationResponse.failure(
-          new ApplicationError("Error al actualizar artista", ErrorCodes.DATABASE_ERROR, undefined, result.error),
+          new ApplicationError(
+            "Error al actualizar artista",
+            ErrorCodes.DATABASE_ERROR,
+            undefined,
+            result.error,
+          ),
         );
       }
       return ApplicationResponse.emptySuccess();
@@ -140,19 +154,28 @@ export default class ArtistService {
     }
   }
 
-  async search(filters: PaginationRequest<ArtistSearchFilters>): Promise<ApplicationResponse<PaginationResponse<ArtistResponse>>> {
+  async search(
+    filters: PaginationRequest<ArtistSearchFilters>,
+  ): Promise<ApplicationResponse<PaginationResponse<ArtistResponse>>> {
     try {
       const artistFilters: ArtistFilters = {
         includeFilters: false,
         artistName: filters.filters?.name,
         countryCode: filters.filters?.country,
-        formationYear: filters.filters?.formationYear ? parseInt(filters.filters.formationYear, 10) : undefined,
+        formationYear: filters.filters?.formationYear
+          ? parseInt(filters.filters.formationYear, 10)
+          : undefined,
       };
 
       const result = await this.queryPort.searchByFilters(artistFilters);
       if (!result.isSuccess) {
         return ApplicationResponse.failure(
-          new ApplicationError("Error al buscar artistas", ErrorCodes.DATABASE_ERROR, undefined, result.error),
+          new ApplicationError(
+            "Error al buscar artistas",
+            ErrorCodes.DATABASE_ERROR,
+            undefined,
+            result.error,
+          ),
         );
       }
 
@@ -163,9 +186,9 @@ export default class ArtistService {
       const paginatedArtists = artists.slice(start, start + pageSize);
 
       const response = PaginationResponse.create(
-        paginatedArtists.map(a => this.mapToResponse(a)),
+        paginatedArtists.map((a) => this.mapToResponse(a)),
         paginatedArtists.length,
-        artists.length
+        artists.length,
       );
 
       return ApplicationResponse.success(response);
@@ -185,7 +208,12 @@ export default class ArtistService {
       const result = await this.commandPort.logicalDelete(id);
       if (!result.isSuccess) {
         return ApplicationResponse.failure(
-          new ApplicationError("Error al eliminar artista", ErrorCodes.DATABASE_ERROR, undefined, result.error),
+          new ApplicationError(
+            "Error al eliminar artista",
+            ErrorCodes.DATABASE_ERROR,
+            undefined,
+            result.error,
+          ),
         );
       }
       return ApplicationResponse.emptySuccess();
@@ -214,7 +242,12 @@ export default class ArtistService {
       const statusResult = await this.commandPort.updateStatus(id, ArtistStatus.ACTIVE);
       if (!statusResult.isSuccess) {
         return ApplicationResponse.failure(
-          new ApplicationError("Error al aceptar artista", ErrorCodes.DATABASE_ERROR, undefined, statusResult.error),
+          new ApplicationError(
+            "Error al aceptar artista",
+            ErrorCodes.DATABASE_ERROR,
+            undefined,
+            statusResult.error,
+          ),
         );
       }
       // asignar rol artist si existe user vinculado
@@ -257,7 +290,12 @@ export default class ArtistService {
       const result = await this.commandPort.updateStatus(id, ArtistStatus.REJECTED);
       if (!result.isSuccess) {
         return ApplicationResponse.failure(
-          new ApplicationError("Error al rechazar artista", ErrorCodes.DATABASE_ERROR, undefined, result.error),
+          new ApplicationError(
+            "Error al rechazar artista",
+            ErrorCodes.DATABASE_ERROR,
+            undefined,
+            result.error,
+          ),
         );
       }
       return ApplicationResponse.emptySuccess();

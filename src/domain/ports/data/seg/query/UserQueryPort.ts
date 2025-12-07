@@ -14,7 +14,5 @@ export default interface UserQueryPort {
   searchActiveUserByFilters(filters: Omit<UserFilters, "status">): Promise<Response<User[]>>;
   searchActiveUsersByIds(ids: number[]): Promise<Response<Array<User>>>;
   existsActiveUserById(id: number): Promise<Response<boolean>>;
-  existsActiveUserByFilters(
-    filters: Omit<UserFilters, "status">,
-  ): Promise<Response<boolean>>;
+  existsActiveUserByFilters(filters: Omit<UserFilters, "status">): Promise<Response<boolean>>;
 }

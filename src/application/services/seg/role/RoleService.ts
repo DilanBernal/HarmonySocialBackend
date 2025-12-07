@@ -12,7 +12,7 @@ export default class RoleService {
     private rolePort: RolePort,
     private userRolePort: UserRolePort,
     private logger: LoggerPort,
-  ) { }
+  ) {}
 
   async create(request: RoleCreateRequest): Promise<ApplicationResponse<number>> {
     try {

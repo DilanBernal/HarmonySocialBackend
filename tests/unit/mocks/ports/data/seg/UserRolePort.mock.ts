@@ -8,9 +8,15 @@ const createMockRole = (
   name: string,
   description?: string,
   createdAt?: Date,
-  updatedAt?: Date
+  updatedAt?: Date,
 ): Role => {
-  return new Role(id, name, description, createdAt ?? new Date("2023-01-01"), updatedAt ?? new Date("2023-01-01"));
+  return new Role(
+    id,
+    name,
+    description,
+    createdAt ?? new Date("2023-01-01"),
+    updatedAt ?? new Date("2023-01-01"),
+  );
 };
 
 // Mock data para roles basados en el seed
@@ -37,65 +43,69 @@ const mockRoleUsers = new Map<string, number[]>([
 
 const createUserRolePortMock = (): jest.Mocked<UserRolePort> => {
   const mockRoles = createMockRoles();
-  
+
   return {
-    assignRoleToUser: jest.fn().mockImplementation(async (userId: number, roleId: number): Promise<boolean> => {
-      // Verificar que el rol existe
-      const roleExists = mockRoles.some(r => r.id === roleId);
-      if (!roleExists) {
-        return false;
-      }
-
-      // Obtener roles actuales del usuario
-      const currentUserRoles = mockUserRoles.get(userId) || [];
-
-      // Si ya tiene el rol, retornar true (ya asignado)
-      if (currentUserRoles.includes(roleId)) {
-        return true;
-      }
-
-      // Simular asignación del rol
-      const updatedRoles = [...currentUserRoles, roleId];
-      mockUserRoles.set(userId, updatedRoles);
-
-      // Actualizar también el mapa de usuarios por rol
-      const role = mockRoles.find(r => r.id === roleId);
-      if (role) {
-        const usersForRole = mockRoleUsers.get(role.name) || [];
-        if (!usersForRole.includes(userId)) {
-          mockRoleUsers.set(role.name, [...usersForRole, userId]);
+    assignRoleToUser: jest
+      .fn()
+      .mockImplementation(async (userId: number, roleId: number): Promise<boolean> => {
+        // Verificar que el rol existe
+        const roleExists = mockRoles.some((r) => r.id === roleId);
+        if (!roleExists) {
+          return false;
         }
-      }
 
-      return true;
-    }),
+        // Obtener roles actuales del usuario
+        const currentUserRoles = mockUserRoles.get(userId) || [];
 
-    removeRoleFromUser: jest.fn().mockImplementation(async (userId: number, roleId: number): Promise<boolean> => {
-      const currentUserRoles = mockUserRoles.get(userId) || [];
+        // Si ya tiene el rol, retornar true (ya asignado)
+        if (currentUserRoles.includes(roleId)) {
+          return true;
+        }
 
-      // Si no tiene el rol, retornar false
-      if (!currentUserRoles.includes(roleId)) {
-        return false;
-      }
+        // Simular asignación del rol
+        const updatedRoles = [...currentUserRoles, roleId];
+        mockUserRoles.set(userId, updatedRoles);
 
-      // Remover el rol
-      const updatedRoles = currentUserRoles.filter(r => r !== roleId);
-      mockUserRoles.set(userId, updatedRoles);
+        // Actualizar también el mapa de usuarios por rol
+        const role = mockRoles.find((r) => r.id === roleId);
+        if (role) {
+          const usersForRole = mockRoleUsers.get(role.name) || [];
+          if (!usersForRole.includes(userId)) {
+            mockRoleUsers.set(role.name, [...usersForRole, userId]);
+          }
+        }
 
-      // Actualizar también el mapa de usuarios por rol
-      const role = mockRoles.find(r => r.id === roleId);
-      if (role) {
-        const usersForRole = mockRoleUsers.get(role.name) || [];
-        const updatedUsers = usersForRole.filter(u => u !== userId);
-        mockRoleUsers.set(role.name, updatedUsers);
-      }
+        return true;
+      }),
 
-      return true;
-    }),
+    removeRoleFromUser: jest
+      .fn()
+      .mockImplementation(async (userId: number, roleId: number): Promise<boolean> => {
+        const currentUserRoles = mockUserRoles.get(userId) || [];
+
+        // Si no tiene el rol, retornar false
+        if (!currentUserRoles.includes(roleId)) {
+          return false;
+        }
+
+        // Remover el rol
+        const updatedRoles = currentUserRoles.filter((r) => r !== roleId);
+        mockUserRoles.set(userId, updatedRoles);
+
+        // Actualizar también el mapa de usuarios por rol
+        const role = mockRoles.find((r) => r.id === roleId);
+        if (role) {
+          const usersForRole = mockRoleUsers.get(role.name) || [];
+          const updatedUsers = usersForRole.filter((u) => u !== userId);
+          mockRoleUsers.set(role.name, updatedUsers);
+        }
+
+        return true;
+      }),
 
     listRolesForUser: jest.fn().mockImplementation(async (userId: number): Promise<Role[]> => {
       const userRoleIds = mockUserRoles.get(userId) || [];
-      return mockRoles.filter(role => userRoleIds.includes(role.id));
+      return mockRoles.filter((role) => userRoleIds.includes(role.id));
     }),
 
     listUsersForRole: jest.fn().mockImplementation(async (roleName: string): Promise<number[]> => {
@@ -103,17 +113,19 @@ const createUserRolePortMock = (): jest.Mocked<UserRolePort> => {
       return [...users]; // Retornar copia del array
     }),
 
-    userHasRole: jest.fn().mockImplementation(async (userId: number, roleName: string): Promise<boolean> => {
-      const userRoleIds = mockUserRoles.get(userId) || [];
-      const role = mockRoles.find(r => r.name === roleName);
+    userHasRole: jest
+      .fn()
+      .mockImplementation(async (userId: number, roleName: string): Promise<boolean> => {
+        const userRoleIds = mockUserRoles.get(userId) || [];
+        const role = mockRoles.find((r) => r.name === roleName);
 
-      if (!role) {
-        return false;
-      }
+        if (!role) {
+          return false;
+        }
 
-      return userRoleIds.includes(role.id);
-    }),
+        return userRoleIds.includes(role.id);
+      }),
   };
-}
+};
 
 export default createUserRolePortMock;

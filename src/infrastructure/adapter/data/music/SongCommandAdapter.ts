@@ -78,7 +78,9 @@ export default class SongCommandAdapter implements SongCommandPort {
         ...(song.decade !== undefined && { decade: toInt(song.decade) }),
         ...(song.country !== undefined && { country: song.country ?? null }),
         ...(song.instruments !== undefined && { instruments: song.instruments ?? null }),
-        ...(song.difficultyLevel !== undefined && { difficultyLevel: song.difficultyLevel ?? null }),
+        ...(song.difficultyLevel !== undefined && {
+          difficultyLevel: song.difficultyLevel ?? null,
+        }),
         ...(song.verifiedByArtist !== undefined && { verifiedByArtist: song.verifiedByArtist }),
         ...(song.verifiedByUsers !== undefined && { verifiedByUsers: song.verifiedByUsers }),
       };

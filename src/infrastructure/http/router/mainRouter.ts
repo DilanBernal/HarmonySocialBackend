@@ -25,7 +25,7 @@ mainRouter.use("/roles", roleRouter);
 mainRouter.use("/user-roles", userRoleRouter);
 mainRouter.use("/", permissionRouter);
 mainRouter.use("/", rolePermissionRouter);
-mainRouter.use("/search", searchBarRouter)
+mainRouter.use("/search", searchBarRouter);
 
 mainRouter.get("/ping", (_req, res) => res.send("Pong!"));
 

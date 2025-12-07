@@ -73,7 +73,7 @@ friendshipRouter.get("/user/:id", authenticateToken, async (req, res) => {
 friendshipRouter.get("/common", authenticateToken, async (req, res) => {
   try {
     await friendshipController.getCommonFriendships(req, res);
-  } catch (error) { }
+  } catch (error) {}
 });
 
 /**

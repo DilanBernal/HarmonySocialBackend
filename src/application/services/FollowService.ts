@@ -2,7 +2,7 @@ import { UserFollowRepository } from "../../domain/ports/data/social/UserFollows
 import UserFollowsUser from "../../domain/models/social/UserFollowsUser";
 
 export class UserFollowService {
-  constructor(private userFollowRepo: UserFollowRepository) { }
+  constructor(private userFollowRepo: UserFollowRepository) {}
 
   async follow(followerId: number, followedId: number): Promise<UserFollowsUser> {
     if (followerId === followedId) throw new Error("Cannot follow yourself");

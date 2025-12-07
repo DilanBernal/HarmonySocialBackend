@@ -36,7 +36,7 @@ export default class AuthService {
     loggerPort: LoggerPort,
     tokenPort: TokenPort,
     userRolePort: UserRolePort,
-    rolePermissionPort: RolePermissionPort
+    rolePermissionPort: RolePermissionPort,
   ) {
     this.userQueryPort = userQueryPort;
     this.userCommandPort = userCommandPort;
@@ -112,9 +112,13 @@ export default class AuthService {
 
       const newConcurrencyStamp = this.tokenPort.generateStamp();
 
-      this.userCommandPort.updateUser(userId, {
-        concurrencyStamp: newConcurrencyStamp,
-      }).catch((err) => { this.loggerPort.error("Ocurrio un error al actualizar el stamp del usuario") });
+      this.userCommandPort
+        .updateUser(userId, {
+          concurrencyStamp: newConcurrencyStamp,
+        })
+        .catch((err) => {
+          this.loggerPort.error("Ocurrio un error al actualizar el stamp del usuario");
+        });
       const payload = { id: userId, roles: roleNames, permissions };
       const authResponse: AuthResponse = await this.authPort.loginUser(requests, payload, {
         profile_image: userInfo.profileImage,
@@ -153,7 +157,7 @@ export default class AuthService {
         new ApplicationError("Ocurrió un error inesperado", ErrorCodes.SERVER_ERROR),
       );
     } finally {
-      console.timeEnd("Tiempo en peticion de login")
+      console.timeEnd("Tiempo en peticion de login");
     }
   }
 
@@ -172,7 +176,7 @@ export default class AuthService {
           message: "No se pudo encontrar un usuario con el email dado",
         });
       }
-    } catch (error) { }
+    } catch (error) {}
     return ApplicationResponse.success(true);
   }
 
@@ -266,7 +270,9 @@ export default class AuthService {
       });
 
       if (uResp.getValue().status == UserStatus.ACTIVE) {
-        return ApplicationResponse.failure(new ApplicationError("El usuario ya se activo", ErrorCodes.BUSINESS_RULE_VIOLATION));
+        return ApplicationResponse.failure(
+          new ApplicationError("El usuario ya se activo", ErrorCodes.BUSINESS_RULE_VIOLATION),
+        );
       }
       if (!uResp.isSuccess || !uResp.value) {
         return ApplicationResponse.failure(

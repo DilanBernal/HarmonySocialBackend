@@ -1,6 +1,11 @@
 import app from "./infrastructure/http/web/app";
 import ServerBootstrap from "./infrastructure/bootstrap/server_bootstrap";
-import { connectSqlDB, connectMongoDB, closeMongoDB, getMongoDB } from "./infrastructure/config/con_database";
+import {
+  connectSqlDB,
+  connectMongoDB,
+  closeMongoDB,
+  getMongoDB,
+} from "./infrastructure/config/con_database";
 
 const server = new ServerBootstrap(app);
 

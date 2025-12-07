@@ -5,6 +5,6 @@ type UserPreferences = {
   userPostTags?: Array<UserTag>;
   userSongTags?: Array<UserTag>;
   userArtistsTags?: Array<UserTag>;
-}
+};
 
 export default UserPreferences;
