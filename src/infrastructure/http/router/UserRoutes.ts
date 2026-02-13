@@ -25,8 +25,14 @@ import { enrichPermissionsFromToken, requirePermissions } from "../middleware/au
 import parseNestedQuery from "../middleware/parseNestedQuery";
 import { validatePaginatedRequest } from "../middleware/validatePaginatedRequest";
 import { validateRequest } from "../middleware/validateRequest";
+import rateLimit from "express-rate-limit";
 
 const router = Router();
+
+const userPaginatedRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs for this endpoint
+});
 
 const userCommandAdapter: UserCommandPort = new UserCommandPortAdapter();
 const userQueryAdapter: UserQueryPort = new UserQueryAdapter();
@@ -235,6 +241,7 @@ router.post("/verify-email", async (req, res) => {
     console.error(errorMessage, error);
   }
 });
+  userPaginatedRateLimiter,
 
 router.get(
   "/paginated",

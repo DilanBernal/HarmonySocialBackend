@@ -28,7 +28,8 @@
     "pino-prettier": "3.0.1-dev",
     "typeorm": "0.3.26",
     "uuid": "11.1.0",
-    "zod": "4.1.13"
+    "zod": "4.1.13",
+    "express-rate-limit": "^8.2.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
