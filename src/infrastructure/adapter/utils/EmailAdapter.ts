@@ -8,14 +8,18 @@ export default class EmailNodemailerAdapter implements EmailPort {
   private transporter: Transporter;
 
   constructor(private logger: LoggerPort) {
+    let authOptions: Object | undefined = {
+      user: envs.SMTP_USER,
+      pass: envs.SMTP_PASSWORD,
+    };
+    if (!envs.SMTP_USER && !envs.SMTP_PASSWORD) {
+      authOptions = undefined;
+    }
     this.transporter = nodemailer.createTransport({
       host: envs.SMTP_HOST,
       port: Number(envs.SMTP_PORT) || 587,
       secure: false,
-      auth: {
-        user: envs.SMTP_USER,
-        pass: envs.SMTP_PASSWORD,
-      },
+      auth: authOptions,
     });
   }
 

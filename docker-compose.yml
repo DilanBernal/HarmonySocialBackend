@@ -54,7 +54,6 @@ services:
   mongo_db:
     image: mongo:7
     container_name: harmony-mongo
-    restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
@@ -68,7 +67,6 @@ services:
   mongo-express:
     image: mongo-express:1.0
     container_name: harmony-mongo-express
-    restart: always
     ports:
       - "8015:8015"
     environment:
